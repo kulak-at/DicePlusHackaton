@@ -5,6 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/DICEPlus_2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kuba/git/51f00859c54345ab75000001-diceplus_sdk_2.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
