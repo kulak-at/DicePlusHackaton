@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 public class LearningAPIActivity extends Activity {
@@ -50,9 +51,16 @@ public class LearningAPIActivity extends Activity {
     };
     
     DiceConnectionListener connectionListener = new DiceConnectionListener() {
+    	
         @Override
         public void onConnectionEstablished(Die die) {
-            Log.d(TAG, "DICE+ Connected");
+        	LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
+						}
+					});
 
             // Signing up for roll events
             DiceController.subscribeRolls(dicePlus);
@@ -82,9 +90,14 @@ public class LearningAPIActivity extends Activity {
         public void onRoll(Die die, RollData rollData, Exception e) {
             super.onRoll(die, rollData, e);
 
-            Log.d(TAG, "Roll: " + rollData.face);
-
             final int face = rollData.face;
+            LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getApplication(), "rolled " + face, Toast.LENGTH_LONG).show();
+						}
+					});
         }
     };
 
@@ -138,6 +151,13 @@ public class LearningAPIActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	public void rescan(View view){
+		if (dicePlus != null)
+			DiceController.disconnectDie(dicePlus);
+		dicePlus = null;
+		BluetoothManipulator.startScan();
 	}
 
 }
