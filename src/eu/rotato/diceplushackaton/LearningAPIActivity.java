@@ -7,9 +7,10 @@ import us.dicepl.android.sdk.DiceResponseAdapter;
 import us.dicepl.android.sdk.DiceResponseListener;
 import us.dicepl.android.sdk.DiceScanningListener;
 import us.dicepl.android.sdk.Die;
-import us.dicepl.android.sdk.protocol.constants.Constants.LedAnimationType;
+import us.dicepl.android.sdk.responsedata.OrientationData;
 import us.dicepl.android.sdk.responsedata.RollData;
 import us.dicepl.android.sdk.responsedata.TemperatureData;
+import us.dicepl.android.sdk.responsedata.TouchData;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,13 +18,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import eu.rotato.diceplushackaton.R;
 
 public class LearningAPIActivity extends Activity {
 
 	private static final int[] developerKey = new int[] {0x83, 0xed, 0x60, 0x0e, 0x5d, 0x31, 0x8f, 0xe7};
 	private static final String TAG = "DICEPlus";	
 	private Die dicePlus;
-	private TextView myText;
 	
     DiceScanningListener scanningListener = new DiceScanningListener() {
         @Override
@@ -62,7 +63,6 @@ public class LearningAPIActivity extends Activity {
         			new Runnable() {
 						@Override
 						public void run() {
-							myText.setText("connected!");
 							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
 						}
 					});
@@ -70,6 +70,8 @@ public class LearningAPIActivity extends Activity {
             // Signing up for roll events
             DiceController.subscribeRolls(dicePlus);
        //     DiceController.subscribeTemperatureReadouts(dicePlus);
+            DiceController.subscribeOrientationReadouts(dicePlus);
+            DiceController.subscribeTouchReadouts(dicePlus);
         }
 
         @Override
@@ -89,7 +91,7 @@ public class LearningAPIActivity extends Activity {
         			new Runnable() {
 						@Override
 						public void run() {
-							myText.setText("connection lost");
+							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
 						}
 					});
 
@@ -126,13 +128,61 @@ public class LearningAPIActivity extends Activity {
 						}
 					});
         }
+        
+        @Override
+        public void onOrientationReadout(Die die, OrientationData data, Exception ex)
+        {
+        	final int roll = data.roll;
+        	final int pitch = data.pitch;
+        	final int yaw = data.yaw;
+        	
+        	LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							TextView rollView = (TextView) findViewById(R.id.rollValueText);
+							TextView pitchView = (TextView) findViewById(R.id.pitchValueText);
+							TextView yawView = (TextView) findViewById(R.id.yawValueText);
+							
+							rollView.setText(roll + "");
+							pitchView.setText(pitch + "");
+							yawView.setText(yaw + "");
+						}
+					});
+        	
+        	Log.d("mazurek", "onOrientationReadout");
+        	Log.d("mazurek", "Roll value: " + roll);
+        	Log.d("mazurek", "Pitch value: " + pitch);
+        	Log.d("mazurek", "Yaw value: " + yaw);
+        }
+        
+        @Override
+        public void onTouchReadout(Die die, TouchData readout, Exception exception)
+        {
+        	Log.d("mazurek", "onTouchReadout");
+        	
+        	final int current_state_mask = readout.current_state_mask;
+        	int change_mask = readout.change_mask;
+        	
+        	LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							TextView currentMask = (TextView) findViewById(R.id.touchMaskValueText);
+							
+							currentMask.setText(current_state_mask + "");
+						}
+					});
+        	
+        	Log.d("mazurek", "current state mask: " + current_state_mask);
+        	Log.d("mazurek", "change mask: " + change_mask);
+        }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learning_api);
-        myText = (TextView) findViewById(R.id.text1);
     }
 
 
