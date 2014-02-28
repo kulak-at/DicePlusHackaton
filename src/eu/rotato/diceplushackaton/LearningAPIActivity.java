@@ -11,15 +11,15 @@ import us.dicepl.android.sdk.responsedata.OrientationData;
 import us.dicepl.android.sdk.responsedata.RollData;
 import us.dicepl.android.sdk.responsedata.TemperatureData;
 import us.dicepl.android.sdk.responsedata.TouchData;
-import android.graphics.*;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import eu.rotato.diceplushackaton.R;
 
 public class LearningAPIActivity extends Activity {
 
@@ -258,8 +258,9 @@ public class LearningAPIActivity extends Activity {
 	public void animateMagenta(View view){
 		if (dicePlus == null)
 			return;
+		EditText et = (EditText) findViewById(R.id.sides);
 		AnimationHelper ah = new AnimationHelper(dicePlus);
-		ah.showColorOnSides(Color.MAGENTA, "13");
+		ah.showColorOnSides(Color.MAGENTA, et.getText().toString());
 	}
 
 }

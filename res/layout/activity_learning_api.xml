@@ -110,4 +110,11 @@
         android:onClick="animateMagenta"
         android:text="magenta"
         />
+    <EditText 
+        android:id="@+id/sides"
+        android:hint="sides"
+        android:layout_below="@id/animateMagenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     />
 </RelativeLayout>
