@@ -11,6 +11,7 @@ import us.dicepl.android.sdk.responsedata.OrientationData;
 import us.dicepl.android.sdk.responsedata.RollData;
 import us.dicepl.android.sdk.responsedata.TemperatureData;
 import us.dicepl.android.sdk.responsedata.TouchData;
+import android.graphics.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -238,11 +239,18 @@ public class LearningAPIActivity extends Activity {
 		BluetoothManipulator.startScan();
 	}
 	
-	public void animate(View view){
+	public void animateCyan(View view){
 		if (dicePlus == null)
 			return;
-		DiceController.runFadeAnimation(dicePlus, 12, 3, 200, 200, 200, 1000, 1000, 10);
-		//DiceController.runStandardAnimation(dicePlus, 10, 1, LedAnimationType.ANIMATION_ROLL_FAILED);
+		AnimationHelper ah = new AnimationHelper(dicePlus);
+		ah.showOneColor(android.graphics.Color.CYAN);
+	}
+	
+	public void animateMagenta(View view){
+		if (dicePlus == null)
+			return;
+		AnimationHelper ah = new AnimationHelper(dicePlus);
+		ah.showColorOnSides(Color.MAGENTA, "13");
 	}
 
 }

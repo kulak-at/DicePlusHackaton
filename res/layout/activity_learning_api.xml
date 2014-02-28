@@ -8,12 +8,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LearningAPIActivity" >
 
+    <Button
+        android:id="@+id/rescan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="rescan"
+        android:text="Rescan" />
+        
     <TextView
         android:id="@+id/rollTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/animateButton"
+        android:layout_below="@id/rescan"
         android:layout_marginTop="58dp"
         android:text="Roll value" />
 
@@ -35,23 +44,7 @@
         android:layout_alignParentRight="true"
         android:text="Yaw value" />
 
-    <Button
-        android:id="@+id/rescan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:onClick="rescan"
-        android:text="Rescan" />
 
-    <Button
-        android:id="@+id/animateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rescan"
-        android:onClick="animate"
-        android:text="animate" />
 
     <TextView
         android:id="@+id/pitchValueText"
@@ -100,4 +93,21 @@
         android:layout_marginTop="34dp"
         android:text="0" />
 
+    <Button
+        android:id="@+id/animateCyan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/touchMaskValueText"
+        android:onClick="animateCyan"
+        android:text="cyan"
+        />
+    
+    <Button
+        android:id="@+id/animateMagenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/animateCyan"
+        android:onClick="animateMagenta"
+        android:text="magenta"
+        />
 </RelativeLayout>
