@@ -15,6 +15,7 @@
         android:text="@string/hello_world" />
     
     <Button
+        android:id="@+id/rescan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text1"
@@ -22,4 +23,11 @@
         android:onClick="rescan"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rescan"
+        android:onClick="animate"
+        android:text="animate"
+        />
 </RelativeLayout>

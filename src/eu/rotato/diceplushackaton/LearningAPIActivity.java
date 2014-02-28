@@ -7,12 +7,15 @@ import us.dicepl.android.sdk.DiceResponseAdapter;
 import us.dicepl.android.sdk.DiceResponseListener;
 import us.dicepl.android.sdk.DiceScanningListener;
 import us.dicepl.android.sdk.Die;
+import us.dicepl.android.sdk.protocol.constants.Constants.LedAnimationType;
 import us.dicepl.android.sdk.responsedata.RollData;
+import us.dicepl.android.sdk.responsedata.TemperatureData;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LearningAPIActivity extends Activity {
@@ -20,6 +23,7 @@ public class LearningAPIActivity extends Activity {
 	private static final int[] developerKey = new int[] {0x83, 0xed, 0x60, 0x0e, 0x5d, 0x31, 0x8f, 0xe7};
 	private static final String TAG = "DICEPlus";	
 	private Die dicePlus;
+	private TextView myText;
 	
     DiceScanningListener scanningListener = new DiceScanningListener() {
         @Override
@@ -31,7 +35,7 @@ public class LearningAPIActivity extends Activity {
 
         @Override
         public void onScanStarted() {
-        	Toast.makeText(getApplication(), "scan started", Toast.LENGTH_LONG).show();
+        	Toast.makeText(getApplication(), "scan started", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -58,17 +62,20 @@ public class LearningAPIActivity extends Activity {
         			new Runnable() {
 						@Override
 						public void run() {
+							myText.setText("connected!");
 							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
 						}
 					});
 
             // Signing up for roll events
             DiceController.subscribeRolls(dicePlus);
+       //     DiceController.subscribeTemperatureReadouts(dicePlus);
         }
 
         @Override
         public void onConnectionFailed(Die die, Exception e) {
             Log.d(TAG, "Connection failed", e);
+            //myText.setText("disconnected");
 
             dicePlus = null;
 
@@ -78,6 +85,13 @@ public class LearningAPIActivity extends Activity {
         @Override
         public void onConnectionLost(Die die) {
             Log.d(TAG, "Connection lost");
+            LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							myText.setText("connection lost");
+						}
+					});
 
             dicePlus = null;
 
@@ -89,6 +103,7 @@ public class LearningAPIActivity extends Activity {
         @Override
         public void onRoll(Die die, RollData rollData, Exception e) {
             super.onRoll(die, rollData, e);
+            Log.d(TAG, "on Dice roll");
 
             final int face = rollData.face;
             LearningAPIActivity.this.runOnUiThread(
@@ -99,12 +114,25 @@ public class LearningAPIActivity extends Activity {
 						}
 					});
         }
+        
+        public void onTemperatureReadout(Die die, TemperatureData readout, Exception exception){
+        	final TemperatureData data = readout;
+        	LearningAPIActivity.this.runOnUiThread(
+        			new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getApplication(), "temperature readout: " + 
+						data.temperature + "C, timestamp: " + data.timestamp, Toast.LENGTH_LONG).show();
+						}
+					});
+        }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learning_api);
+        myText = (TextView) findViewById(R.id.text1);
     }
 
 
@@ -158,6 +186,13 @@ public class LearningAPIActivity extends Activity {
 			DiceController.disconnectDie(dicePlus);
 		dicePlus = null;
 		BluetoothManipulator.startScan();
+	}
+	
+	public void animate(View view){
+		if (dicePlus == null)
+			return;
+		DiceController.runFadeAnimation(dicePlus, 12, 3, 200, 200, 200, 1000, 1000, 10);
+		//DiceController.runStandardAnimation(dicePlus, 10, 1, LedAnimationType.ANIMATION_ROLL_FAILED);
 	}
 
 }
