@@ -164,7 +164,7 @@ public class LearningAPIActivity extends Activity {
         	
         	final int current_state_mask = readout.current_state_mask;
         	int change_mask = readout.change_mask;
-        	
+        	final Die d1 = die;
         	LearningAPIActivity.this.runOnUiThread(
         			new Runnable() {
 						@Override
@@ -174,6 +174,15 @@ public class LearningAPIActivity extends Activity {
 							currentMask.setText(current_state_mask + "");
 						}
 					});
+        	try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	AnimationHelper ah = new AnimationHelper(d1);
+			
+			ah.showColorOnMask(Color.BLUE, current_state_mask);
         	
         	Log.d("mazurek", "current state mask: " + current_state_mask);
         	Log.d("mazurek", "change mask: " + change_mask);

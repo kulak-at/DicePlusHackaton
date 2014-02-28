@@ -18,6 +18,13 @@ public class AnimationHelper {
 		return res;
 	}
 	
+	public void showColorOnMask(int standardColor, int mask){
+		int red = android.graphics.Color.red(standardColor);
+		int green = android.graphics.Color.green(standardColor);
+		int blue = android.graphics.Color.blue(standardColor);
+		DiceController.runFadeAnimation(die, mask, 0, red, green, blue, 0, 1000, 1);
+	}
+	
 	public void showOneColor(int standardColor){
 		int red = android.graphics.Color.red(standardColor);
 		int green = android.graphics.Color.green(standardColor);
@@ -26,9 +33,6 @@ public class AnimationHelper {
 	}
 	
 	public void showColorOnSides(int standardColor, String sides){
-		int red = android.graphics.Color.red(standardColor);
-		int green = android.graphics.Color.green(standardColor);
-		int blue = android.graphics.Color.blue(standardColor);
-		DiceController.runFadeAnimation(die, convertSides(sides), 0, red, green, blue, 0, 1000, 1);
+		showColorOnMask(standardColor, convertSides(sides));
 	}
 }
