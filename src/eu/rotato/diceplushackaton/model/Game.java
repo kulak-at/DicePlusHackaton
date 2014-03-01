@@ -236,7 +236,9 @@ public class Game {
 		after_points += checkField(player_id, x, y+1, r, g, b);
 		after_points += checkField(player_id, x, y-1, r, g, b);
 		
-		if(points == 0 && after_points > 0) {
+		Pos p = this.players_pos.get(player_id);
+		
+		if(points == 0 && after_points > 0 && !isBlocked(p.x, p.y)) {
 			Game.this.setLabel(player_id, "+" + after_points + " point" + ((after_points>1)?"":"") );
 		}
 		
