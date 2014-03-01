@@ -60,7 +60,6 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
         // Listen to all the state occurring during the discovering process of DICE+
         BluetoothManipulator.registerDiceScanningListener(this);
      // Attaching to DICE+ events that we subscribed to.
-        //DiceController.registerDiceResponseListener(this);
 	}
 	
 	public boolean isReady(){
@@ -142,8 +141,9 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		DiceController.subscribeRolls(die);
 		
 		setDiceColor(pid, 63, 255, 0, 0);
-		DiceController.subscribeOrientationReadouts(die, 500);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
+		
+		DiceController.subscribeOrientationReadouts(die, 500);
 	}
 
 	@Override
