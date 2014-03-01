@@ -21,6 +21,11 @@
         <activity
             android:name="eu.rotato.diceplushackaton.LearningAPIActivity"
             android:label="@string/title_activity_main" >
+            
+        </activity>
+        <activity
+            android:name="eu.rotato.diceplushackaton.PairingActivity"
+            android:label="@string/title_activity_pairing" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

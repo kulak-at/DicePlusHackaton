@@ -1,4 +1,4 @@
-package eu.rotato.diceplushackaton;
+package eu.rotato.diceplushackaton.dice;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import android.graphics.Color;
 
 public class AnimationHelper {
 	private Die die;
-	AnimationHelper(Die die){
+	public AnimationHelper(Die die){
 		this.die = die;
 	}
 	
@@ -24,7 +24,7 @@ public class AnimationHelper {
 		int red = android.graphics.Color.red(standardColor);
 		int green = android.graphics.Color.green(standardColor);
 		int blue = android.graphics.Color.blue(standardColor);
-		DiceController.runFadeAnimation(die, mask, 1, red, green, blue, 0, 1000, 1);
+		DiceController.runFadeAnimation(die, mask, 1, red, green, blue, 100, 500, 1);
 	}
 	
 	public void showOneColor(int standardColor){
