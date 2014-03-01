@@ -59,7 +59,7 @@ public class GameActivity extends Activity {
 		LinearLayout tl = (LinearLayout)findViewById(R.id.table);
 		RelativeLayout pv = (RelativeLayout)findViewById(R.id.pointz);
 		
-		game = new Game(tl, pv, h_c*multiplier, w_c*multiplier, 2);
+		game = new Game(tl, pv, h_c*multiplier, w_c*multiplier, 2, 30);
 	}
 
 	@Override

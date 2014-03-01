@@ -30,6 +30,7 @@ public class Game {
 	int players_count = 2;
 	Field fields[][];
 	Vector<Player> players = null;
+	int timer = 30;
 	
 	class Pos {
 		int x,y;
@@ -39,13 +40,16 @@ public class Game {
 	
 	Random rand = null;
 	
-	public Game(LinearLayout table, View points_view, int rows, int cols, int players_count) {
+	public Game(LinearLayout table, View points_view, int rows, int cols, int players_count, int seconds) {
 		this.rand = new Random();
 		this.table = table;
 		this.poitz = points_view;
 		this.rows = rows;
 		this.cols = cols;
 		this.players_count = players_count;
+		this.timer = seconds;
+		getTimerView().setText(formatTime(seconds));
+		
 		for(int i=0;i<players_count;i++)
 			fadeOut(i, 300, 1000);
 		for(int i=players_count;i<4;i++)
@@ -263,6 +267,18 @@ public class Game {
 	
 	private void fadeOut(int player, int duration, int delay) {
 		getLabel(player).animate().alpha(0.0f).setDuration(duration).setStartDelay(delay);
+	}
+	
+	private TextView getTimerView() {
+		return (TextView)this.poitz.findViewById(R.id.timer);
+	}
+	
+	private void decrementTime() {
+		
+	}
+	
+	private String formatTime(int scnds) {
+		return "0:" + scnds;
 	}
 	
 }
