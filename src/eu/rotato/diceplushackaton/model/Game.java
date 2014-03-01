@@ -166,8 +166,8 @@ public class Game {
 	
 	private void endGame() {
 		isEnded = true;
-		((TextView)points_board.findViewById(R.id.pp1)).setText(getPlayerPoints(0) + " points");
-		((TextView)points_board.findViewById(R.id.pp2)).setText(getPlayerPoints(1) + " points");
+		((TextView)points_board.findViewById(R.id.pp1)).setText(getPlayerPoints(0) + " pts");
+		((TextView)points_board.findViewById(R.id.pp2)).setText(getPlayerPoints(1) + " pts");
 		
 		points_board.setVisibility(View.VISIBLE);
 		points_board.setAlpha(0.0f);
