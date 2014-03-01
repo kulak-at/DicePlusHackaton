@@ -43,6 +43,15 @@ public class Game {
 		int x,y;
 	}
 	
+	class Col {
+		int red, green, blue;
+		public Col(int r,int g,int b) {
+			red = r;
+			green = g;
+			blue = b;
+		}
+	}
+	
 	Vector<Pos> players_pos = null;
 	
 	Random rand = null;
@@ -57,6 +66,8 @@ public class Game {
 		this.timer = seconds;
 		this.points_limit = plimit;
 		this.points_board = points_board;
+		this.points_board.setVisibility(View.GONE);
+		
 		getTimerView().setText(formatTime(seconds));
 		
 		final Handler handler = new Handler();
@@ -104,8 +115,8 @@ public class Game {
 				field_view.setLayoutParams(lparam2);
 				row.addView(field_view);
 				Field field = new Field(field_view);
-				Random rand = new Random();
-				field.changeColor(128*rand.nextInt(3), 128*rand.nextInt(3), 128*rand.nextInt(3));
+				Col col = generateColor(i, j);
+				field.changeColor(col.red, col.green, col.blue);
 				this.fields[i][j] = field;
 				
 				final int p_x = i;
@@ -154,14 +165,38 @@ public class Game {
 			}
 			player.occupyField(curr);
 			this.showSiblings(pos.x, pos.y);
+			this.changePlayerColor(i, curr.getColorR(), curr.getColorG(), curr.getColorB());
 		}
 	}
 	
-	private int generateColor(int i, int j) {
-		int r = rand.nextInt(256);
-		int g = rand.nextInt(256);
-		int b = rand.nextInt(256);
-		return Color.rgb(r, g, b);
+	private Col generateColor(int i, int j) {
+		int r = 128 * rand.nextInt(3);
+		int g = 128 * rand.nextInt(3);
+		int b = 128 * rand.nextInt(3);
+		
+		if(r > 255)
+			r = 255;
+		if(g > 255)
+			g = 255;
+		if(b > 255)
+			b = 255;
+		
+		if(r == g && r == b)
+			return generateColor(i, j);
+		Col c = new Col(r,g,b);
+		if(isSameColor(c, i-1,j-1) || isSameColor(c, i-2, j) || isSameColor(c, i, j-2) || isSameColor(c, i-1, j+1))
+			return generateColor(i, j);
+		
+		Log.i("KOLOR", "" + r + " " + g + " " + b);
+		return c;
+	}
+	
+	private boolean isSameColor(Col c, int x, int y) {
+		if(x < 0 || y < 0 || x >= this.rows || y >= this.cols) {
+			return false;
+		}
+		Field f = this.fields[x][y];
+		return f.getColorR() == c.red && f.getColorG() == c.green && f.getColorB() == c.blue;
 	}
 	
 	private void endGame() {
@@ -174,10 +209,17 @@ public class Game {
 		points_board.animate().alpha(1.0f).setDuration(400);
 	}
 	
-	public void changePlayerColor(int player_id, int r, int g, int b) {
+	public int changePlayerColor(int player_id, int r, int g, int b) {
+		return changePlayerColor(player_id, r, g, b, 0);
+	}
+	
+	public int changePlayerColor(int player_id, int r, int g, int b, int points) {
 		
-		if(isEnded)
-			return;
+		int after_points = points;
+		
+		if(isEnded) {
+			return points;
+		}
 		
 		Player player = this.players.get(player_id);
 		
@@ -185,11 +227,20 @@ public class Game {
 		
 		int x = this.players_pos.get(player_id).x;
 		int y = this.players_pos.get(player_id).y;
+		Log.i("deb", "Checking: " + (x+1) + " " + (y));
+		Log.i("deb", "Checking: " + (x-1) + " " + (y));
+		Log.i("deb", "Checking: " + (x) + " " + (y+1));
+		Log.i("deb", "Checking: " + (x) + " " + (y-1));
+		after_points += checkField(player_id, x+1, y, r, g, b);
+		after_points += checkField(player_id, x-1, y, r, g, b);
+		after_points += checkField(player_id, x, y+1, r, g, b);
+		after_points += checkField(player_id, x, y-1, r, g, b);
 		
-		checkField(player_id, x+1, y, r, g, b);
-		checkField(player_id, x-1, y, r, g, b);
-		checkField(player_id, x, y+1, r, g, b);
-		checkField(player_id, x, y-1, r, g, b);
+		if(points == 0 && after_points > 0) {
+			Game.this.setLabel(player_id, "+" + after_points + " point" + ((after_points>1)?"":"") );
+		}
+		
+		return after_points;
 		
 	}
 	
@@ -219,7 +270,7 @@ public class Game {
 		return this.players.get(player_id).getPoints();
 	}
 	
-	private void checkField(int player_id, int x,int y, int r,int g,int b) {
+	private int checkField(int player_id, int x,int y, int r,int g,int b) {
 		try {
 
 			if(getColorDiff(x, y, r, g, b) < Global.getThreshold() && !this.fields[x][y].isOccupied()) {
@@ -228,7 +279,6 @@ public class Game {
 				// changing
 //				this.fields[x][y].setOccupied(player_id);
 				this.players.get(player_id).occupyField(this.fields[x][y]);
-				Game.this.setLabel(0, "+1 point");
 				if(isBlocked(x, y)) {
 					Game.this.setLabel(0, "Player BLOCKED", true);
 					Game.this.getLabel(0).setTextColor(Color.RED);
@@ -250,9 +300,12 @@ public class Game {
 				p.y = y;
 				this.players.get(player_id).redraw();
 				
+				// checking if no more points here.
+				return changePlayerColor(player_id, r, g, b) + 1;
 			}
+			return 0;
 			
-		} catch(Exception e) { }
+		} catch(Exception e) { return 0; }
 	}
 	
 	private boolean isPlayerBlocked(int pi) {
