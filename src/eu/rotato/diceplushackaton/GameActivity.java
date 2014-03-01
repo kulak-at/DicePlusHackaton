@@ -69,5 +69,11 @@ public class GameActivity extends Activity {
 		return true;
 	}
 	
-
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		
+		DiceController.unregisterDiceResponseListener(gl);
+	}
 }

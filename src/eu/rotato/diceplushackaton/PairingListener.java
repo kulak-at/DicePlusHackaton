@@ -143,7 +143,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		setDiceColor(pid, 63, 255, 0, 0);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
 		
-		DiceController.subscribeOrientationReadouts(die, 500);
+		DiceController.subscribeOrientationReadouts(die, 2);
 	}
 
 	@Override
@@ -162,6 +162,8 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		int pid = 0;
 		if(die!=dices[0]) pid=1;
 		parentActivity.setInfo(pid, "?");
+		
+		DiceController.unsubscribeRolls(die);
 	}
 	
 	public void setDiceColor(int playerId, int mask, int r, int g, int b){

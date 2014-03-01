@@ -99,4 +99,12 @@ public class PairingActivity extends Activity {
 		PairingActivity.this.startActivity(gameIntent);
 	}
 
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		
+		pDisconnect1(null);
+		pDisconnect2(null);
+	}
 }
