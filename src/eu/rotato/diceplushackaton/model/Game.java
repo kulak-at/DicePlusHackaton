@@ -106,6 +106,18 @@ public class Game {
 		
 	}
 	
+	public int getPlayerR(int player_id) {
+		return this.players.get(player_id).color_r;
+	}
+	
+	public int getPlayerG(int player_id) {
+		return this.players.get(player_id).color_g;
+	}
+	
+	public int getPlayerB(int player_id) {
+		return this.players.get(player_id).color_b;
+	}
+	
 	private void checkField(int player_id, int x,int y, int r,int g,int b) {
 		try {
 

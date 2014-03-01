@@ -47,6 +47,10 @@ public class GameActivity extends Activity {
         
         int w_c = width / gg;
         int h_c = height / gg;
+        if(w_c > 20 || h_c > 20) {
+        	w_c /= 5;
+        	h_c /= 5;
+        }
         
         int multiplier = 1;
         
