@@ -60,7 +60,6 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
         // Listen to all the state occurring during the discovering process of DICE+
         BluetoothManipulator.registerDiceScanningListener(this);
      // Attaching to DICE+ events that we subscribed to.
-        //DiceController.registerDiceResponseListener(this);
 	}
 	
 	public boolean isReady(){
@@ -140,9 +139,11 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		//toast("Connection established!"+nowPairing);
 		//TODO What we want to subscribe
 		DiceController.subscribeRolls(die);
-		DiceController.runFadeAnimation(die, pid+1, 0, 255, 0, 0, 500, 59000);
-		DiceController.subscribeOrientationReadouts(die, 500);
+		
+		setDiceColor(pid, 63, 255, 0, 0);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
+		
+		DiceController.subscribeOrientationReadouts(die, 500);
 	}
 
 	@Override
@@ -163,9 +164,13 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		parentActivity.setInfo(pid, "?");
 	}
 	
+	public void setDiceColor(int playerId, int mask, int r, int g, int b){
+		DiceController.runBlinkAnimation(dices[playerId], mask, 0, r, g, b, 65535, 65535, 255);
+	}
+	
 	public void identifyDices(){
-		if(dices[0] != null) DiceController.runFadeAnimation(dices[0], 1, 0, 255, 0, 144, 0, 60000);	//magenta
-		if(dices[1] != null) DiceController.runFadeAnimation(dices[1], 2, 0, 0, 255, 255, 0, 60000);	//cyan
+		if(dices[0] != null) setDiceColor(0, 1, 255, 0, 144);	//magenta
+		if(dices[1] != null) setDiceColor(1, 2, 0, 255, 255);	//cyan
 	}
 	
 }
