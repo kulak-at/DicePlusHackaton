@@ -7,7 +7,21 @@ public class DiceData
 	public int baseYaw;
 	public int resultColor;
 	public int previousRoll;
+	public boolean ignoreYaw;
+	public int colorVal;
 	
+	public int getColorVal() {
+		return colorVal;
+	}
+	public void setColorVal(int colorVal) {
+		this.colorVal = colorVal;
+	}
+	public boolean isIgnoreYaw() {
+		return ignoreYaw;
+	}
+	public void setIgnoreYaw(boolean ignoreYaw) {
+		this.ignoreYaw = ignoreYaw;
+	}
 	public int getPreviousRoll() {
 		return previousRoll;
 	}

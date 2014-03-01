@@ -25,8 +25,6 @@ public class GameListener extends DiceResponseAdapter {
 	private static final long TIMESTAMP_TRESHOLD = 10;
 	private static final int ROLL_TRESHOLD = 40;
 	
-	private static boolean ignoreYaw = true;
-	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
 
@@ -76,21 +74,29 @@ public class GameListener extends DiceResponseAdapter {
 		
 		currentDiceData.setCurrentFace(face);
 		currentDiceData.setBaseYaw(currentDiceData.getCurrentYaw());
+		
+		int currentVal = 0;
+		Game gejm = Global.getGame();
         
         switch (face % 3)
         {
         	case 0:
         		currentDiceData.resultColor = Color.RED;
+        		currentVal = gejm.getPlayerR(pid);
         		break;
         		
         	case 2:
         		currentDiceData.resultColor = Color.GREEN;
+        		currentVal = gejm.getPlayerG(pid);
         		break;
         		
         	case 1:
         		currentDiceData.resultColor = Color.BLUE;
+        		currentVal = gejm.getPlayerB(pid);
         		break;
         }
+        Log.i("kulak_gunwo", "CURRENT VAL: " + currentVal);
+        currentDiceData.setColorVal(currentVal);
         
         int r = Color.red(currentDiceData.resultColor);
         int g = Color.green(currentDiceData.resultColor);
@@ -98,7 +104,7 @@ public class GameListener extends DiceResponseAdapter {
         
         DiceController.runBlinkAnimation(die, 63, 0, r, g, b, 200, 230, 1);
         
-        ignoreYaw = false;
+        currentDiceData.setIgnoreYaw(false);
 		
 		toast("some roll info on dice "+(pid+1)+" with face="+face);
 		
@@ -116,13 +122,13 @@ public class GameListener extends DiceResponseAdapter {
 		int rollDiff = Math.abs(roll - currentDiceData.getPreviousRoll());
 		currentDiceData.setPreviousRoll(roll);
 		
-			if (rollDiff >= ROLL_TRESHOLD && ignoreYaw == false)
+			if (rollDiff >= ROLL_TRESHOLD && !currentDiceData.isIgnoreYaw())
 			{
 				Log.v("gunwo", "Ignore yaw.");
-				ignoreYaw = true;
+				currentDiceData.setIgnoreYaw(true);
 			}
 			
-			if (ignoreYaw)
+			if (currentDiceData.isIgnoreYaw())
 				return;
 		
 		Log.d("gunwo", "Dice: " + pid + " roll value: " + roll);
@@ -155,14 +161,36 @@ public class GameListener extends DiceResponseAdapter {
 		
 		DiceData currentDiceData = diceData[pid];
 		
-		int localBaseYaw = currentDiceData.getBaseYaw();
-		int localCurrentYaw = currentDiceData.getCurrentYaw();
+		int localBaseYaw = currentDiceData.getBaseYaw() + 180;
+		int localCurrentYaw = currentDiceData.getCurrentYaw() + 180;
 		int difference = localCurrentYaw - localBaseYaw;
 		
-		double diffToRGB = ((difference + 180) / 360d) * 256;
-		Log.i("mazurek", "DIFF TO RGB: " + diffToRGB);
-		int diff = (int) Math.floor(diffToRGB);
-		Log.i("mazurek", "DIFF: " + diff);
+		float par_color = currentDiceData.getColorVal() / 256.0f;
+		float par_yaw = (5.0f - par_color + (localCurrentYaw / 360.0f) - (localBaseYaw / 360.f)) % 1;
+		
+		int color = (int)(par_yaw * 255);
+		
+		Log.i("kulak_gunwo", "par_color: " + par_color);
+		Log.i("kulak_gunwo", "par_yaw: " + par_yaw);
+		
+		
+		
+		Log.i("kulak_gunwo", "localBaseYaw: " + localBaseYaw + ", localCurrentYaw:" + localCurrentYaw);
+		
+//		int diffToRGB = checkDiff( (int)Math.floor((difference + 180) / 360d) * 256);
+		
+//		Log.i("kulak_gunwo", "diff2rgb: " + diffToRGB);
+		
+		// przesuwamy
+//		diffToRGB -= currentDiceData.getColorVal();
+		
+//		diffToRGB = (256+diffToRGB) % 256;
+//		Log.i("kulak_gunwo", "after convert: " + diffToRGB);
+		
+		
+//		Log.i("mazurek", "DIFF TO RGB: " + diffToRGB);
+//		int diff = (int) Math.floor(diffToRGB);
+//		Log.i("mazurek", "DIFF: " + diff);
 		
 		int newColor = 0;
 		int newComponent = 0;
@@ -170,24 +198,21 @@ public class GameListener extends DiceResponseAdapter {
 			switch (currentDiceData.getResultColor())
 			{
 				case Color.RED:
-					newComponent = checkDiff(diff);
 					
 					newColor = Color.argb(255, newComponent, 0, 0);
-					player_r = newComponent;
+					player_r = color;
 					break;
 			
 				case Color.BLUE:
-					newComponent = checkDiff(diff);
 					
 					newColor = Color.argb(255, 0, 0, newComponent);
-					player_b = newComponent;
+					player_b = color;
 					break;
 					
 				case Color.GREEN:
-					newComponent = checkDiff(diff);
 					
 					newColor = Color.argb(255, 0, newComponent, 0);
-					player_g = newComponent;
+					player_g = color;
 					break;
 			}
 			
