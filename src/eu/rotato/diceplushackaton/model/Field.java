@@ -3,10 +3,10 @@ package eu.rotato.diceplushackaton.model;
 import java.util.Random;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -20,11 +20,16 @@ public class Field {
 	private int color_b = 0;
 	private int occupied = -1;
 	GradientDrawable drw = null;
+	LayerDrawable whole = null;
 	
 	public Field(ImageView w) {
 		view = w;
 		drw = (GradientDrawable)view.getResources().getDrawable(R.drawable.field_outline);
-		w.setImageDrawable(drw);
+		Drawable[] layers = new Drawable[1];
+		layers[0] = drw;
+        whole = new LayerDrawable(layers);
+        
+		w.setImageDrawable(whole);
 		drw.setStroke(0, Color.BLACK);
 
 		this.hide();
@@ -42,6 +47,21 @@ public class Field {
 		});
 	}
 	
+	public void drawCross(){
+		Drawable[] layers = new Drawable[2];
+		layers[0] = drw;
+		layers[1] = view.getResources().getDrawable(R.drawable.eyes2);
+        whole = new LayerDrawable(layers);
+		view.setImageDrawable(whole);
+	}
+	
+	public void unDrawCross(){
+		Drawable[] layers = new Drawable[1];
+		layers[0] = drw;
+		whole = new LayerDrawable(layers);
+		view.setImageDrawable(whole);
+	}
+	
 	public void changeColor(int r, int g, int b) {
 		this.color_r = r;
 		this.color_g = g;
@@ -49,13 +69,13 @@ public class Field {
 		
 //		ColorDrawable cd = view.getResources().getDrawable(R.drawable.field_shape);
 		drw.setColor(Color.rgb(r, g, b));
-		view.setImageDrawable(drw);
+		view.setImageDrawable(whole);
 	}
 	
 	public void setOccupied(int occupied) {
 		this.occupied = occupied;
 		drw.setStroke(5, Color.BLACK);
-		view.setImageDrawable(drw);
+		view.setImageDrawable(whole);
 		this.show();
 	}
 	

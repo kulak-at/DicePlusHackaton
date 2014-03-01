@@ -21,10 +21,18 @@ public class Player {
 	public boolean occupyField(Field field) {
 		if(field.isOccupied() && field.whoOccupies() != nr)
 			return false;
+		clearFields();
 		fields.add(field);
 		field.setOccupied(this.nr);
 		points++;
+		field.drawCross();
 		return true;
+	}
+	
+	private void clearFields(){
+		for(Field f : fields){
+			f.unDrawCross();
+		}
 	}
 	
 	public void setColor(int r, int g, int b) {
