@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class PairingActivity extends Activity {
 	
 	private Button scanBut1, scanBut2;
+	private Button stopBut1, stopBut2;
 	private TextView views[];
 	private PairingListener pl;
 
@@ -38,30 +39,19 @@ public class PairingActivity extends Activity {
 	
 	public void pScan1(View v){
 		pl.pairPlayers(0);
-		/*scanBut.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				pStop(v);
-			}
-		});*/
 	}
 	public void pScan2(View v){
 		pl.pairPlayers(1);
 	}
-	/*
-	public void pStop(View v){
-		pl.stopPairing();
-		scanBut.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				pScan(v);
-			}
-		});
-	}*/
+	
+	public void pDisconnect1(View v){
+		pl.disconnect(0);
+		//pl.stopPairing();
+	}
+	public void pDisconnect2(View v){
+		pl.disconnect(1);
+		//pl.stopPairing();
+	}
 	
 	public void identifyDices(View v){
 		pl.identifyDices();
