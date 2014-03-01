@@ -1,6 +1,8 @@
 package eu.rotato.diceplushackaton.model;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import eu.rotato.diceplushackaton.Global;
@@ -10,12 +12,14 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
 import android.util.Pair;
 import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -31,6 +35,9 @@ public class Game {
 	Field fields[][];
 	Vector<Player> players = null;
 	int timer = 30;
+	boolean isEnded = false;
+	int points_limit = 10000;
+	View points_board = null;
 	
 	class Pos {
 		int x,y;
@@ -40,7 +47,7 @@ public class Game {
 	
 	Random rand = null;
 	
-	public Game(LinearLayout table, View points_view, int rows, int cols, int players_count, int seconds) {
+	public Game(LinearLayout table, View points_view, View points_board, int rows, int cols, int players_count, int seconds, int plimit) {
 		this.rand = new Random();
 		this.table = table;
 		this.poitz = points_view;
@@ -48,7 +55,35 @@ public class Game {
 		this.cols = cols;
 		this.players_count = players_count;
 		this.timer = seconds;
+		this.points_limit = plimit;
+		this.points_board = points_board;
 		getTimerView().setText(formatTime(seconds));
+		
+		final Handler handler = new Handler();
+
+		Timer t = new Timer();
+		TimerTask ttask = new TimerTask() {
+			
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(isEnded)
+							return;
+						
+						decrementTime();
+						if(timer > 0) {
+							handler.postDelayed(this, 1000);
+						} else {
+							endGame();
+						}
+					}
+				});
+			}
+		};
+		t.schedule(ttask, 1000);
 		
 		for(int i=0;i<players_count;i++)
 			fadeOut(i, 300, 1000);
@@ -129,7 +164,21 @@ public class Game {
 		return Color.rgb(r, g, b);
 	}
 	
+	private void endGame() {
+		isEnded = true;
+		((TextView)points_board.findViewById(R.id.pp1)).setText(getPlayerPoints(0) + " points");
+		((TextView)points_board.findViewById(R.id.pp2)).setText(getPlayerPoints(1) + " points");
+		
+		points_board.setVisibility(View.VISIBLE);
+		points_board.setAlpha(0.0f);
+		points_board.animate().alpha(1.0f).setDuration(400);
+	}
+	
 	public void changePlayerColor(int player_id, int r, int g, int b) {
+		
+		if(isEnded)
+			return;
+		
 		Player player = this.players.get(player_id);
 		
 		player.setColor(r, g, b);
@@ -164,6 +213,10 @@ public class Game {
 	
 	public int getPlayerB(int player_id) {
 		return this.players.get(player_id).color_b;
+	}
+	
+	public int getPlayerPoints(int player_id) {
+		return this.players.get(player_id).getPoints();
 	}
 	
 	private void checkField(int player_id, int x,int y, int r,int g,int b) {
@@ -274,11 +327,17 @@ public class Game {
 	}
 	
 	private void decrementTime() {
-		
+		this.timer--;
+		getTimerView().setText(formatTime(this.timer));
 	}
 	
 	private String formatTime(int scnds) {
-		return "0:" + scnds;
+		int rest = scnds % 60;
+		String val = (scnds / 60) + ":";
+		if(rest < 10)
+			val = val + "0";
+		val = val + rest;
+		return val;
 	}
 	
 }

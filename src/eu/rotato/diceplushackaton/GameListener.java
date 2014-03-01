@@ -23,7 +23,7 @@ public class GameListener extends DiceResponseAdapter {
 	private GameActivity parentActivity;
 	
 	private static final int COLOR_TRESHOLD = 30;
-	private static final long TIMESTAMP_TRESHOLD = 20;
+	private static final long TIMESTAMP_TRESHOLD = 10;
 	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){

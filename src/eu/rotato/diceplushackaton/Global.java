@@ -6,6 +6,8 @@ public class Global {
 	static private int multiplier = 1;
 	static private int threshold = 50;
 	static private Game game = null;
+	static private int timer = 30;
+	static private int points_limit = 100;
 	
 	static public int getMultiplier() {
 		return multiplier;
@@ -26,5 +28,21 @@ public class Global {
 	
 	static public void setGame(Game g) {
 		game = g;
+	}
+	
+	static public int getTimer() {
+		return timer;
+	}
+	
+	static public void setTimer(int t) {
+		timer = t;
+	}
+	
+	static public int getPointsLimit() {
+		return points_limit;
+	}
+	
+	static public void setPointsLimit(int limit) {
+		points_limit = limit;
 	}
 }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -54,12 +55,15 @@ public class GameActivity extends Activity {
         }
         
         int multiplier = Global.getMultiplier();
+        int timer = Global.getTimer();
+        int points_limit = Global.getPointsLimit();
         
         setContentView(R.layout.lay);
 		LinearLayout tl = (LinearLayout)findViewById(R.id.table);
 		RelativeLayout pv = (RelativeLayout)findViewById(R.id.pointz);
+		View points_board = findViewById(R.id.results);
 		
-		game = new Game(tl, pv, h_c*multiplier, w_c*multiplier, 2, 30);
+		game = new Game(tl, pv, points_board, h_c*multiplier, w_c*multiplier, 2, timer, points_limit);
 		Global.setGame(game);
 	}
 
