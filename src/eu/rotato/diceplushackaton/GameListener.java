@@ -1,5 +1,6 @@
 package eu.rotato.diceplushackaton;
 
+import us.dicepl.android.sdk.DiceController;
 import us.dicepl.android.sdk.DiceResponseAdapter;
 import us.dicepl.android.sdk.Die;
 import us.dicepl.android.sdk.responsedata.MagnetometerData;
@@ -88,6 +89,12 @@ public class GameListener extends DiceResponseAdapter {
         		currentDiceData.resultColor = Color.BLUE;
         		break;
         }
+        
+        int r = Color.red(currentDiceData.resultColor);
+        int g = Color.green(currentDiceData.resultColor);
+        int b = Color.blue(currentDiceData.resultColor);
+        
+        DiceController.runBlinkAnimation(die, 63, 0, r, g, b, 200, 230, 1);
 		
 		toast("some roll info on dice "+(pid+1)+" with face="+face);
 		

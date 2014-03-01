@@ -5,6 +5,7 @@ import us.dicepl.android.sdk.DiceConnectionListener;
 import us.dicepl.android.sdk.DiceController;
 import us.dicepl.android.sdk.DiceScanningListener;
 import us.dicepl.android.sdk.Die;
+import us.dicepl.android.sdk.protocol.constants.Constants.DieMode;
 import android.widget.Toast;
 
 // Testzone!
@@ -139,11 +140,12 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		//toast("Connection established!"+nowPairing);
 		//TODO What we want to subscribe
 		DiceController.subscribeRolls(die);
+		DiceController.setMode(die, DieMode.DIE_MODE_NO_ROLL_ANIMATIONS);
 		
 		setDiceColor(pid, 63, 255, 0, 0);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
 		
-		DiceController.subscribeOrientationReadouts(die, 2);
+		DiceController.subscribeOrientationReadouts(die, 4);
 	}
 
 	@Override

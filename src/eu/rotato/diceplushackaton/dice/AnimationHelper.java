@@ -12,7 +12,7 @@ public class AnimationHelper {
 		this.die = die;
 	}
 	
-	public int convertSides(String sides){
+	public static int convertSides(String sides){
 		int res = 0;
 		for(int i = 0; i < sides.length(); i++){
 			res += 1 << (sides.charAt(i) - '1');
@@ -24,7 +24,7 @@ public class AnimationHelper {
 		int red = android.graphics.Color.red(standardColor);
 		int green = android.graphics.Color.green(standardColor);
 		int blue = android.graphics.Color.blue(standardColor);
-		DiceController.runFadeAnimation(die, mask, 1, red, green, blue, 100, 500, 1);
+		DiceController.runBlinkAnimation(die, mask, 0, red, green, blue, 65535, 65535, 1);
 	}
 	
 	public void showOneColor(int standardColor){
