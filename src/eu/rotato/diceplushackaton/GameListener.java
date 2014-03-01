@@ -22,7 +22,8 @@ public class GameListener extends DiceResponseAdapter {
 	private AnimationHelper[] animationHelpers;
 	private GameActivity parentActivity;
 	
-	private static final long TIMESTAMP_TRESHOLD = 20;
+	private static final int COLOR_TRESHOLD = 30;
+	private static final long TIMESTAMP_TRESHOLD = 10;
 	private static final int ROLL_TRESHOLD = 40;
 	
 	private static boolean ignoreYaw = true;
