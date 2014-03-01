@@ -105,7 +105,7 @@ public class Game {
 				row.addView(field_view);
 				Field field = new Field(field_view);
 				Random rand = new Random();
-				field.changeColor(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+				field.changeColor(128*rand.nextInt(3), 128*rand.nextInt(3), 128*rand.nextInt(3));
 				this.fields[i][j] = field;
 				
 				final int p_x = i;
@@ -232,7 +232,12 @@ public class Game {
 				if(isBlocked(x, y)) {
 					Game.this.setLabel(0, "Player BLOCKED", true);
 					Game.this.getLabel(0).setTextColor(Color.RED);
+					if(isPlayerBlocked(0) && isPlayerBlocked(1))
+						endGame();
 				}
+				
+				if(getPlayerPoints(player_id) >= points_limit)
+					endGame();
 				
 				
 				Pos p = this.players_pos.get(player_id);
@@ -248,6 +253,11 @@ public class Game {
 			}
 			
 		} catch(Exception e) { }
+	}
+	
+	private boolean isPlayerBlocked(int pi) {
+		Pos p = this.players_pos.get(pi);
+		return isBlocked(p.x, p.y);
 	}
 	
 	private void hideSiblings(int x, int y) {
