@@ -52,6 +52,7 @@ public class Game {
 	public Game(LinearLayout table, View points_view, View points_board, int rows, int cols, int players_count, int seconds, int plimit) {
 		this.rand = new Random();
 		this.table = table;
+		table.setBackgroundColor(Color.TRANSPARENT);
 		this.poitz = points_view;
 		this.rows = rows;
 		this.cols = cols;
@@ -101,6 +102,7 @@ public class Game {
 			LinearLayout row = new LinearLayout(table.getContext());
 			row.setLayoutParams(lparam);
 			row.setOrientation(LinearLayout.HORIZONTAL);
+			row.setBackgroundColor(Color.TRANSPARENT);
 			table.addView(row);
 			for(int j=0;j<this.cols;j++) {
 				ImageView field_view = new ImageView(table.getContext());
