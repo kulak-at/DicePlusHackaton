@@ -1,6 +1,7 @@
 package eu.rotato.diceplushackaton;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -9,25 +10,22 @@ import android.widget.TextView;
 
 public class PairingActivity extends Activity {
 	
-	private boolean p1Ready;
-	private boolean p2Ready;
-	public Button buts[];
-	public TextView views[];
-	private Button accBut;
+	private Button scanBut1, scanBut2;
+	private TextView views[];
 	private PairingListener pl;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pairing);
-		p1Ready = p2Ready = false;
 		views = new TextView[2];
 		views[0] = (TextView) this.findViewById(R.id.diceView1);
 		views[1] = (TextView) this.findViewById(R.id.diceView2);
-		buts = new Button[2];
-		buts[0] = (Button) this.findViewById(R.id.scanBut1);
-		buts[1] = (Button) this.findViewById(R.id.scanBut2);
-		accBut = (Button) this.findViewById(R.id.acceptButton);
+		views[0].setText("?");
+		views[1].setText("?");
+		scanBut1 = (Button) this.findViewById(R.id.scanBut1);
+		scanBut2 = (Button) this.findViewById(R.id.scanBut2);
+		
 		pl = new PairingListener(this);
 	}
 
@@ -38,16 +36,77 @@ public class PairingActivity extends Activity {
 		return true;
 	}
 	
-	public void pScan(int playerId){
-		pl.pairPlayer(playerId);
+	public void pScan1(View v){
+		pl.pairPlayers(0);
+		/*scanBut.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				pStop(v);
+			}
+		});*/
+	}
+	public void pScan2(View v){
+		pl.pairPlayers(1);
+	}
+	/*
+	public void pStop(View v){
+		pl.stopPairing();
+		scanBut.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				pScan(v);
+			}
+		});
+	}*/
+	
+	public void identifyDices(View v){
+		pl.identifyDices();
 	}
 	
-	public void p1Scan(View view){
-		pScan(0);
+	public void setEnabled(final boolean enabled){
+		this.runOnUiThread(new Runnable(){
+			@Override
+			public void run()
+			{
+				scanBut1.setEnabled(enabled);
+				scanBut2.setEnabled(enabled);
+			}
+			
+		});
 	}
 	
-	public void p2Scan(View view){
-		pScan(1);
+	public void setInfo(final int playerId, final String text){
+		this.runOnUiThread(new Runnable(){
+
+			@Override
+			public void run()
+			{
+				views[playerId].setText(text);
+			}
+			
+		});
+	}
+	
+	public void setButText(final String text){
+		this.runOnUiThread(new Runnable(){
+
+			@Override
+			public void run()
+			{
+				scanBut1.setText(text);
+				scanBut2.setText(text);
+			}
+			
+		});
+	}
+	
+	public void goToGame(View view){
+		Intent gameIntent = new Intent(PairingActivity.this, GameActivity.class);
+		PairingActivity.this.startActivity(gameIntent);
 	}
 
 }

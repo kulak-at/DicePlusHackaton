@@ -15,37 +15,51 @@
 	    android:layout_centerVertical="true"
 	    android:orientation="vertical" >
 
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Nazwa"
+            android:textSize="64dp" />
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2" >
+            android:layout_weight="2">
             
-            <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            	<LinearLayout
+	    android:layout_width="0dp"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="1"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:orientation="vertical"
+	    android:gravity="center_horizontal">
+	    <Button
+	            android:id="@+id/scanBut1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="64dp"
+	            android:onClick="pScan1"
+	            android:text="Scan" />
 	            <TextView
 	            android:id="@+id/diceView1"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:textSize="128dp"
 	            android:text="A" />
-	            <Button
-	            android:id="@+id/scanBut1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:onClick="p1Scan"
-	            android:text="P1 Rescan" />
-        	</LinearLayout>	<!-- player 1 -->
+	            </LinearLayout>
+	            
         	
-        	<LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+
+	            <LinearLayout
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:layout_height="fill_parent"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:orientation="vertical"
+	    android:gravity="center_horizontal">
 	            <TextView
 	            android:id="@+id/diceView2"
 	            android:layout_width="wrap_content"
@@ -54,18 +68,28 @@
 	            android:text="A" />
 	            <Button
 	            android:id="@+id/scanBut2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:onClick="p2Scan"
-	            android:text="P2 Rescan" />
-        	</LinearLayout> <!-- player 2 -->
+	            android:layout_width="fill_parent"
+	            android:layout_height="64dp"
+	            android:onClick="pScan2"
+	            android:text="Scan" />
+	            </LinearLayout>
+	            
         	
         </LinearLayout>
+        <Button
+	            android:id="@+id/identifyBut"
+	            android:layout_width="fill_parent"
+	            android:layout_height="64dp"
+	            android:onClick="identifyDices"
+	            android:text="Identify" />
+        
+        		<!-- player 1 -->
 
         <Button
             android:id="@+id/acceptButton"
             android:layout_width="fill_parent"
             android:layout_height="64dp"
+            android:onClick="goToGame"
             android:text="I'm okej!" />
 
     </LinearLayout>

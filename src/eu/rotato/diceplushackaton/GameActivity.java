@@ -1,24 +1,20 @@
 package eu.rotato.diceplushackaton;
 
-import eu.rotato.diceplushackaton.model.Game;
-import android.os.Bundle;
-import android.os.PowerManager;
+import us.dicepl.android.sdk.DiceController;
 import android.app.Activity;
-import android.content.Context;
-import android.util.AttributeSet;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import eu.rotato.diceplushackaton.model.Game;
 
 public class GameActivity extends Activity {
 
 	Game game = null;
+	private GameListener gl;
+	//private PairingListener pl;
 	
 	public static int gcd(int p, int q) {
 	    if (q == 0) {
@@ -30,7 +26,11 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//pl = PairingListener.getInstance();
+		//pl.setGameActivity(this);
 		
+		gl = new GameListener(this);
+		DiceController.registerDiceResponseListener(gl);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
@@ -66,5 +66,6 @@ public class GameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.game, menu);
 		return true;
 	}
+	
 
 }
