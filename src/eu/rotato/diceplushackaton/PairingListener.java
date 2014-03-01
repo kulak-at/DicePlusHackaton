@@ -135,6 +135,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		DiceController.subscribeRolls(die);
 		//DiceController.subscribeMagnetometerReadouts(die);
 		DiceController.runFadeAnimation(die, pid+1, 0, 255, 0, 0, 500, 59000);
+		DiceController.subscribeOrientationReadouts(die, 500);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
 	}
 

@@ -6,8 +6,11 @@ import java.util.Vector;
 import eu.rotato.diceplushackaton.Global;
 
 import android.graphics.Color;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -53,6 +56,19 @@ public class Game {
 				Random rand = new Random();
 				field.changeColor(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
 				this.fields[i][j] = field;
+				
+				final int p_x = i;
+				final int p_y = j;
+				
+				field_view.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Log.i("game", "Pos: " + p_x + ", " + p_y);
+						Field field = Game.this.fields[p_x][p_y];
+						Game.this.changePlayerColor(0, field.getColorR(), field.getColorG(), field.getColorB());
+					}
+				});
 			}
 		}
 		
@@ -65,25 +81,28 @@ public class Game {
 			this.players_pos.add(pos);
 			
 			// setting player starting point
+			Field curr = null;
 			if(i == 0) {
-				fields[0][0].setOccupied(i);
+				curr = fields[0][0];
+//				fields[0][0].setOccupied(i);
 				pos.x = 0;
 				pos.y = 0;
 				
 			} else if(i == 1) {
-				fields[0][this.cols - 1].setOccupied(i);
-				pos.x = 0;
+				curr = fields[this.rows - 1][this.cols - 1];
+				pos.x = this.rows - 1;
 				pos.y = this.cols - 1;
-				
 			} else if(i == 2) {
-				fields[this.rows - 1][0].setOccupied(i);
+				curr = fields[this.rows - 1][0];
 				pos.x = this.rows - 1;
 				pos.y = 0;
 			} else {
-				fields[this.rows - 1][this.cols - 1].setOccupied(i);
-				pos.x = this.rows - 1;
+				curr = fields[0][this.cols - 1];
+				pos.x = 0;
 				pos.y = this.cols - 1;
 			}
+			player.occupyField(curr);
+			this.showSiblings(pos.x, pos.y);
 		}
 	}
 	
@@ -128,8 +147,16 @@ public class Game {
 				Log.i("game", "Occupying field: " + x + ", " + y + " (Player " + player_id + ")");
 				
 				// changing
-				this.fields[x][y].setOccupied(player_id);
+//				this.fields[x][y].setOccupied(player_id);
+				this.players.get(player_id).occupyField(this.fields[x][y]);
+				
+				
 				Pos p = this.players_pos.get(player_id);
+				
+				hideSiblings(p.x, p.y);
+				showSiblings(x, y);
+				show(x, y);
+				
 				p.x = x;
 				p.y = y;
 				this.players.get(player_id).redraw();
@@ -137,6 +164,33 @@ public class Game {
 			}
 			
 		} catch(Exception e) { }
+	}
+	
+	private void hideSiblings(int x, int y) {
+		hide(x+1, y);
+		hide(x-1, y);
+		hide(x, y+1);
+		hide(x,y-1);
+	}
+	
+	private void showSiblings(int x, int y) {
+		show(x+1, y);
+		show(x-1, y);
+		show(x, y+1);
+		show(x, y-1);
+	}
+	
+	private void hide(int x, int y) {
+		if(x < 0 || y < 0 || x >= this.rows || y >= this.cols || this.fields[x][y].isOccupied())
+			return;
+		
+		this.fields[x][y].hide();
+	}
+	
+	private void show(int x, int y) {
+		if(x < 0 || y < 0 || x >= this.rows || y >= this.cols)
+			return;
+		this.fields[x][y].show();
 	}
 	
 	private int getColorDiff(int x, int y, int r, int g, int b) throws Exception {

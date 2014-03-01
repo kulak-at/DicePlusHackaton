@@ -27,6 +27,8 @@ public class Field {
 		w.setImageDrawable(drw);
 		drw.setStroke(0, Color.BLACK);
 
+		this.hide();
+		
 		this.changeColor(color_r, color_g, color_b);
 		
 		w.setOnClickListener(new OnClickListener() {
@@ -54,10 +56,11 @@ public class Field {
 		this.occupied = occupied;
 		drw.setStroke(5, Color.BLACK);
 		view.setImageDrawable(drw);
+		this.show();
 	}
 	
 	public boolean isOccupied() {
-		return this.occupied > 0;
+		return this.occupied >= 0;
 	}
 	
 	public int whoOccupies() {
@@ -82,5 +85,13 @@ public class Field {
 		int g = rand.nextInt(256);
 		int b = rand.nextInt(256);
 		return Color.rgb(r, g, b);
+	}
+	
+	public void hide() {
+		view.setVisibility(View.INVISIBLE);
+	}
+	
+	public void show() {
+		view.setVisibility(View.VISIBLE);
 	}
 }
