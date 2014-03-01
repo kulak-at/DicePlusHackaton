@@ -5,27 +5,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import eu.rotato.diceplushackaton.Global;
-import eu.rotato.diceplushackaton.R;
-
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
-import android.util.Pair;
-import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
+import eu.rotato.diceplushackaton.Global;
+import eu.rotato.diceplushackaton.R;
 
 public class Game {
 	LinearLayout table = null;
@@ -111,6 +104,7 @@ public class Game {
 			table.addView(row);
 			for(int j=0;j<this.cols;j++) {
 				ImageView field_view = new ImageView(table.getContext());
+				field_view.setBackgroundColor(Color.TRANSPARENT);
 				LinearLayout.LayoutParams lparam2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f);
 				field_view.setLayoutParams(lparam2);
 				row.addView(field_view);
@@ -201,8 +195,12 @@ public class Game {
 	
 	private void endGame() {
 		isEnded = true;
-		((TextView)points_board.findViewById(R.id.pp1)).setText(getPlayerPoints(0) + " pts");
-		((TextView)points_board.findViewById(R.id.pp2)).setText(getPlayerPoints(1) + " pts");
+		String suf0, suf1;
+		suf0 = suf1 = " pt";
+		if(getPlayerPoints(0) >1) suf0+="s";
+		if(getPlayerPoints(1) >1) suf1+="s"; 
+		((TextView)points_board.findViewById(R.id.pp1)).setText(getPlayerPoints(0) + suf0);
+		((TextView)points_board.findViewById(R.id.pp2)).setText(getPlayerPoints(1) + suf1);
 		
 		points_board.setVisibility(View.VISIBLE);
 		points_board.setAlpha(0.0f);
