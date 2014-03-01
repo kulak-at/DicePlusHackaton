@@ -6,7 +6,14 @@ public class DiceData
 	public int currentYaw;
 	public int baseYaw;
 	public int resultColor;
+	public int previousRoll;
 	
+	public int getPreviousRoll() {
+		return previousRoll;
+	}
+	public void setPreviousRoll(int previousRoll) {
+		this.previousRoll = previousRoll;
+	}
 	public int getCurrentFace() {
 		return currentFace;
 	}
