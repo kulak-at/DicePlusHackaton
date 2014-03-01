@@ -15,6 +15,7 @@ public class GameListener extends DiceResponseAdapter {
 	private PairingListener pl;
 	private Die dices[];
 	private DiceData[] diceData;
+	private AnimationHelper[] animationHelpers;
 	private GameActivity parentActivity;
 	
 	private static final int COLOR_TRESHOLD = 30;
@@ -42,6 +43,13 @@ public class GameListener extends DiceResponseAdapter {
 			for (int i = 0; i < dices.length; i++)
 			{
 				diceData[i] = new DiceData();
+			}
+			
+		animationHelpers = new AnimationHelper[dices.length];
+		
+			for (int i = 0; i < dices.length; i++)
+			{
+				animationHelpers[i] = new AnimationHelper(dices[i]);
 			}
 	}
 	
@@ -87,7 +95,7 @@ public class GameListener extends DiceResponseAdapter {
 	
 	@Override
 	public void onOrientationReadout(Die die, OrientationData readout, Exception ex)
-	{
+	{	
 		int pid=0;
 		if(die!=dices[0]) pid=1;
 		
@@ -141,9 +149,8 @@ public class GameListener extends DiceResponseAdapter {
 					break;
 			}
 			
-		Log.d("mazurek", newComponent + "");
-		
-		AnimationHelper ah = new AnimationHelper(dices[pid]);
-		ah.showColorOnSides(newColor, currentDiceData.currentFace + "");
+		Log.d("mazurek", "Dice: " + pid + " component value: " + newComponent);
+
+		animationHelpers[pid].showColorOnSides(newColor, currentDiceData.currentFace + "");
 	}
 }
