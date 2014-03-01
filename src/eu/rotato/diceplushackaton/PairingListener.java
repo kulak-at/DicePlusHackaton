@@ -73,14 +73,21 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		nowPairing=playerId;
 		if(dices[nowPairing] != null) DiceController.disconnectDie(dices[nowPairing]);
 		found = false;
-		toast("Pairing...");
+		//toast("Pairing...");
 		parentActivity.setButText("Scanning..."+nowPairing);
 		parentActivity.setEnabled(false);
 		BluetoothManipulator.startScan();
 	}
 	
+	public void disconnect(final int playerId){
+		if(dices[playerId] != null){
+			DiceController.disconnectDie(dices[playerId]);
+			parentActivity.setInfo(playerId, "?");
+		}
+	}
+	
 	public void stopPairing(){
-		toast("Pairing stopped.");
+		//toast("Pairing stopped.");
 		BluetoothManipulator.cancelScan();
 		//parentActivity.setInfo(nowPairing, "?", "Scan", true);
 	}
@@ -95,7 +102,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		
 		dices[nowPairing]=die;
 		found=true;
-		toast("New dice"+nowPairing);
+		//toast("New dice"+nowPairing);
         DiceController.connect(die);
 	}
 
@@ -110,7 +117,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 
 	@Override
 	public void onScanFinished() {
-		toast("Scan finished.");
+		//toast("Scan finished.");
 		parentActivity.setButText("Scan");
 		parentActivity.setEnabled(true);
 		
@@ -118,7 +125,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 
 	@Override
 	public void onScanStarted() {
-		toast("Scan started!"+nowPairing);
+		//toast("Scan started!"+nowPairing);
 		// TODO Auto-generated method stub
 
 	}
@@ -130,10 +137,9 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		int pid = 0;
 		if(die!=dices[0]) pid=1;
 		parentActivity.setInfo(pid, ""+(pid+1));
-		toast("Connection established!"+nowPairing);
+		//toast("Connection established!"+nowPairing);
 		//TODO What we want to subscribe
 		DiceController.subscribeRolls(die);
-		//DiceController.subscribeMagnetometerReadouts(die);
 		DiceController.runFadeAnimation(die, pid+1, 0, 255, 0, 0, 500, 59000);
 		DiceController.subscribeOrientationReadouts(die, 500);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
