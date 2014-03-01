@@ -1,0 +1,121 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LearningAPIActivity" >
+
+    <Button
+        android:id="@+id/rescan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="rescan"
+        android:text="Rescan" />
+        
+    <TextView
+        android:id="@+id/rollTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/rescan"
+        android:layout_marginTop="58dp"
+        android:text="Roll value" />
+
+    <TextView
+        android:id="@+id/pitchTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rollTitle"
+        android:layout_alignBottom="@+id/rollTitle"
+        android:layout_centerHorizontal="true"
+        android:text="Pitch value" />
+
+    <TextView
+        android:id="@+id/yawTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/pitchTitle"
+        android:layout_alignBottom="@+id/pitchTitle"
+        android:layout_alignParentRight="true"
+        android:text="Yaw value" />
+
+
+
+    <TextView
+        android:id="@+id/pitchValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rollValueText"
+        android:layout_alignBottom="@+id/rollValueText"
+        android:layout_centerHorizontal="true"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/yawValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/pitchValueText"
+        android:layout_alignBottom="@+id/pitchValueText"
+        android:layout_alignLeft="@+id/yawTitle"
+        android:layout_marginLeft="23dp"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/rollValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/rollTitle"
+        android:layout_below="@+id/rollTitle"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="20dp"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/touchMaskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollValueText"
+        android:layout_marginTop="64dp"
+        android:layout_toLeftOf="@+id/pitchValueText"
+        android:text="Current touch mask" />
+
+    <TextView
+        android:id="@+id/touchMaskValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rollValueText"
+        android:layout_below="@+id/touchMaskTitle"
+        android:layout_marginTop="34dp"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/animateCyan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/touchMaskValueText"
+        android:onClick="animateCyan"
+        android:text="cyan"
+        />
+    
+    <Button
+        android:id="@+id/animateMagenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/animateCyan"
+        android:onClick="animateMagenta"
+        android:text="magenta"
+        />
+    
+    <EditText 
+        android:id="@+id/sides"
+        android:hint="sides"
+        android:layout_below="@id/animateMagenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     />
+</RelativeLayout>
