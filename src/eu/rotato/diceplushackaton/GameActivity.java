@@ -52,7 +52,7 @@ public class GameActivity extends Activity {
         	h_c /= 5;
         }
         
-        int multiplier = 1;
+        int multiplier = Global.getMultiplier();
         
         setContentView(R.layout.lay);
 		LinearLayout tl = (LinearLayout)findViewById(R.id.table);

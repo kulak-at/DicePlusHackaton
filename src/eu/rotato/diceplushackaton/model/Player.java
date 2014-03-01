@@ -11,6 +11,7 @@ public class Player {
 	int color_g = 0;
 	int color_b = 0;
 	int nr = 0;
+	int points = 0;
 	
 	public Player(int nr) {
 		fields = new Vector<Field>();
@@ -22,6 +23,7 @@ public class Player {
 			return false;
 		fields.add(field);
 		field.setOccupied(this.nr);
+		points++;
 		return true;
 	}
 	
@@ -36,5 +38,9 @@ public class Player {
 		for(Field field : fields) {
 			field.changeColor(color_r, color_g, color_b);
 		}
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 }

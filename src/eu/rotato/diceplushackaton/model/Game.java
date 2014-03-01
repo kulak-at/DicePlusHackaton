@@ -3,7 +3,10 @@ package eu.rotato.diceplushackaton.model;
 import java.util.Random;
 import java.util.Vector;
 
+import eu.rotato.diceplushackaton.Global;
+
 import android.graphics.Color;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -121,7 +124,9 @@ public class Game {
 	private void checkField(int player_id, int x,int y, int r,int g,int b) {
 		try {
 
-			if(getColorDiff(x, y, r, g, b) < 50 && !this.fields[x][y].isOccupied()) {
+			if(getColorDiff(x, y, r, g, b) < Global.getThreshold() && !this.fields[x][y].isOccupied()) {
+				Log.i("game", "Occupying field: " + x + ", " + y + " (Player " + player_id + ")");
+				
 				// changing
 				this.fields[x][y].setOccupied(player_id);
 				Pos p = this.players_pos.get(player_id);
