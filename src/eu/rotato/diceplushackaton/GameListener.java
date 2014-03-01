@@ -12,7 +12,6 @@ import android.widget.Toast;
 import eu.rotato.diceplushackaton.dice.AnimationHelper;
 import eu.rotato.diceplushackaton.model.DiceData;
 import eu.rotato.diceplushackaton.model.Game;
-import eu.rotato.diceplushackaton.model.Player;
 
 public class GameListener extends DiceResponseAdapter {
 	private PairingListener pl;
@@ -118,7 +117,10 @@ public class GameListener extends DiceResponseAdapter {
 		currentDiceData.setPreviousRoll(roll);
 		
 			if (rollDiff >= ROLL_TRESHOLD && ignoreYaw == false)
+			{
+				Log.v("gunwo", "Ignore yaw.");
 				ignoreYaw = true;
+			}
 			
 			if (ignoreYaw)
 				return;
@@ -135,67 +137,66 @@ public class GameListener extends DiceResponseAdapter {
 	private void updateColor(final int pid)
 	{
 		Game game = Global.getGame();
-		if(game == null)
-			return;
+		
+			if(game == null)
+				return;
+			
+			if(System.currentTimeMillis() - playerTime[pid] < TIMESTAMP_TRESHOLD)
+				return;
+			
+		playerTime[pid] = System.currentTimeMillis();
 		
 		int player_r = game.getPlayerR(pid);
+//		Log.i("mazurek", "RED: " + player_r);
 		int player_g = game.getPlayerG(pid);
+//		Log.i("mazurek", "GREEN: " + player_g);
 		int player_b = game.getPlayerB(pid);
+//		Log.i("mazurek", "BLUE: " + player_b);
 		
 		DiceData currentDiceData = diceData[pid];
 		
 		int localBaseYaw = currentDiceData.getBaseYaw();
-		
-			
-		
 		int localCurrentYaw = currentDiceData.getCurrentYaw();
-		int difference = Math.abs(localBaseYaw - localCurrentYaw);
+		int difference = localCurrentYaw - localBaseYaw;
 		
+		double diffToRGB = ((difference + 180) / 360d) * 256;
+		Log.i("mazurek", "DIFF TO RGB: " + diffToRGB);
+		int diff = (int) Math.floor(diffToRGB);
+		Log.i("mazurek", "DIFF: " + diff);
 		
-			if (localCurrentYaw < localBaseYaw)
-				difference *= -1;
+		int newColor = 0;
+		int newComponent = 0;
 		
-			int colorDiff = difference % 256;
-		
-//			if (Math.abs(colorDiff) < COLOR_TRESHOLD)
-//				return;
-		
-			if(System.currentTimeMillis() - playerTime[pid] < TIMESTAMP_TRESHOLD)
-				return;
-			
-			 playerTime[pid] = System.currentTimeMillis();
-			
-			int newComponent = 255 + colorDiff;
-			
-				if (newComponent < 0)
-					newComponent = 0;
-			
-				if (newComponent > 255)
-					newComponent = 255;
-			
-			int newColor = 0;
-			Log.i("game", "Player " + pid + ": Component: " + newComponent);
-			
 			switch (currentDiceData.getResultColor())
 			{
 				case Color.RED:
+					newComponent = checkDiff(diff);
+					
 					newColor = Color.argb(255, newComponent, 0, 0);
-					player_g = newComponent;
+					player_r = newComponent;
 					break;
 			
 				case Color.BLUE:
+					newComponent = checkDiff(diff);
+					
 					newColor = Color.argb(255, 0, 0, newComponent);
 					player_b = newComponent;
 					break;
 					
 				case Color.GREEN:
+					newComponent = checkDiff(diff);
+					
 					newColor = Color.argb(255, 0, newComponent, 0);
 					player_g = newComponent;
 					break;
 			}
+			
+			Log.i("mazurek", "Player " + pid + ": Component: " + newComponent);
+			
 			final int f_r = player_r;
 			final int f_g = player_g;
 			final int f_b = player_b;
+			
 			parentActivity.runOnUiThread(new Runnable() {
 				
 				@Override
@@ -204,9 +205,20 @@ public class GameListener extends DiceResponseAdapter {
 					
 				}
 			});
-			
-		Log.d("mazurek", "Dice: " + pid + " component value: " + newComponent);
 
 		animationHelpers[pid].showColorOnSides(newColor, currentDiceData.currentFace + "");
+	}
+	
+	private int checkDiff(int diff)
+	{
+		Log.e("mazurek", (diff) + "");
+		
+		if ((diff) > 255)
+			return 255;
+		
+		else if ((diff) < 0)
+			return 0;
+
+		return diff;
 	}
 }
