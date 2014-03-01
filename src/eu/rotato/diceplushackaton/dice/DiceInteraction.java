@@ -21,6 +21,7 @@ public class DiceInteraction extends DiceResponseAdapter
 	private int currentFace;
 	private int currentYaw;
 	private int baseYaw;
+	private int resultColor;
 	
 	private static final int COLOR_TRESHOLD = 30;
 	private static final String TAG = "DICEPlus";
@@ -39,6 +40,21 @@ public class DiceInteraction extends DiceResponseAdapter
             final int face = rollData.face;
             currentFace = face;
             baseYaw = currentYaw;
+            
+            switch (face % 3)
+            {
+            	case 0:
+            		resultColor = Color.RED;
+            		break;
+            		
+            	case 2:
+            		resultColor = Color.GREEN;
+            		break;
+            		
+            	case 1:
+            		resultColor = Color.BLUE;
+            		break;	
+            }
             
             activity.runOnUiThread(
         			new Runnable() {
@@ -125,20 +141,35 @@ public class DiceInteraction extends DiceResponseAdapter
 		
 			if (Math.abs(colorDiff) < COLOR_TRESHOLD)
 				return;
+			
+			int newComponent = 255 + colorDiff;
+			
+				if (newComponent < 0)
+					newComponent = 0;
+			
+				if (newComponent > 255)
+					newComponent = 255;
+			
+			int newColor = 0;
+			
+			switch (resultColor)
+			{
+				case Color.RED:
+					newColor = Color.argb(255, newComponent, 0, 0);
+					break;
+			
+				case Color.BLUE:
+					newColor = Color.argb(255, 0, 0, newComponent);
+					break;
+					
+				case Color.GREEN:
+					newColor = Color.argb(255, 0, newComponent, 0);
+					break;
+			}
+			
+		Log.d("mazurek", newComponent + "");
 		
-		int green = Color.green(Color.GREEN);
-		int newColor = green + colorDiff;
-		
-			if (newColor < 0)
-				newColor = 0;
-			
-			if (newColor > 255)
-				newColor = 255;
-			
-		Log.d("mazurek", newColor + "");
-			
-		int fullColor = Color.argb(255, 0, newColor, 0);
 		AnimationHelper ah = new AnimationHelper(dicePlus);
-		ah.showColorOnSides(fullColor, currentFace + "");
+		ah.showColorOnSides(newColor, currentFace + "");
 	}
 }
