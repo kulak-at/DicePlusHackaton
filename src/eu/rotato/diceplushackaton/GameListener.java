@@ -24,7 +24,7 @@ public class GameListener extends DiceResponseAdapter {
 	private static final int COLOR_TRESHOLD = 30;
 	private static final long TIMESTAMP_TRESHOLD = 10;
 	private static final int ROLL_TRESHOLD = 40;
-	
+/*	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
 
@@ -37,7 +37,7 @@ public class GameListener extends DiceResponseAdapter {
 		});
 		
 	}
-	
+*/	
 	public GameListener(GameActivity ga) {
 		parentActivity = ga;
 		// TODO Auto-generated constructor stub
@@ -105,9 +105,6 @@ public class GameListener extends DiceResponseAdapter {
         DiceController.runBlinkAnimation(die, 63, 0, r, g, b, 200, 230, 1);
         
         currentDiceData.setIgnoreYaw(false);
-		
-		toast("some roll info on dice "+(pid+1)+" with face="+face);
-		
 	}
 	
 	@Override

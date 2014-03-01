@@ -34,11 +34,6 @@ public class LearningAPIActivity extends Activity {
         }
 
         @Override
-        public void onScanStarted() {
-        	Toast.makeText(getApplication(), "scan started", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
         public void onScanFailed() {
             Log.d(TAG, "Scan Failed");
             BluetoothManipulator.startScan();
@@ -52,6 +47,12 @@ public class LearningAPIActivity extends Activity {
                 BluetoothManipulator.startScan();
             }
         }
+
+		@Override
+		public void onScanStarted() {
+			// TODO Auto-generated method stub
+			
+		}
     };
     
     DiceConnectionListener connectionListener = new DiceConnectionListener() {
@@ -62,7 +63,7 @@ public class LearningAPIActivity extends Activity {
         			new Runnable() {
 						@Override
 						public void run() {
-							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplication(), "Connection estabilished.", Toast.LENGTH_SHORT).show();
 						}
 					});
 
@@ -89,13 +90,6 @@ public class LearningAPIActivity extends Activity {
         @Override
         public void onConnectionLost(Die die) {
             Log.d(TAG, "Connection lost");
-            LearningAPIActivity.this.runOnUiThread(
-        			new Runnable() {
-						@Override
-						public void run() {
-							Toast.makeText(getApplication(), "connection estabilished", Toast.LENGTH_LONG).show();
-						}
-					});
 
             dicePlus = null;
 

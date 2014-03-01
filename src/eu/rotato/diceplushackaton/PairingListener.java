@@ -26,7 +26,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 	//private int secondOne;
 	private boolean found;
 	private PairingActivity parentActivity;
-	
+/*	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
 
@@ -39,7 +39,7 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		});
 		
 	}
-	
+*/	
 	public Die[] getDices(){
 		return dices;
 	}
@@ -112,7 +112,6 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 	@Override
 	public void onScanFailed() {
 		// TODO Auto-generated method stub
-		toast("Scan failed.");
 		parentActivity.setInfo(0, "?");
 		parentActivity.setInfo(1, "?");
 		//parentActivity.setInfo(nowPairing, "?", "Scan", true);
@@ -153,7 +152,6 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 
 	@Override
 	public void onConnectionFailed(Die die, Exception arg1) {
-		toast("Connection failed!");
 		int pid = 0;
 		if(die!=dices[0]) pid=1;
 		parentActivity.setInfo(pid, "?");
@@ -163,7 +161,6 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 
 	@Override
 	public void onConnectionLost(Die die) {
-		toast("Connection lost!");
 		int pid = 0;
 		if(die!=dices[0]) pid=1;
 		parentActivity.setInfo(pid, "?");
