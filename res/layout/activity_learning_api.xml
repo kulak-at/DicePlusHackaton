@@ -110,6 +110,7 @@
         android:onClick="animateMagenta"
         android:text="magenta"
         />
+    
     <EditText 
         android:id="@+id/sides"
         android:hint="sides"

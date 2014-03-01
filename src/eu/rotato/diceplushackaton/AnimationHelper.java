@@ -1,8 +1,10 @@
 package eu.rotato.diceplushackaton;
 
+import java.util.Random;
+
 import us.dicepl.android.sdk.DiceController;
 import us.dicepl.android.sdk.Die;
-import android.util.Log;
+import android.graphics.Color;
 
 public class AnimationHelper {
 	private Die die;
@@ -34,5 +36,14 @@ public class AnimationHelper {
 	
 	public void showColorOnSides(int standardColor, String sides){
 		showColorOnMask(standardColor, convertSides(sides));
+	}
+	
+	public void makeSomeParty(){
+		int colors[] = {Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED, Color.MAGENTA, Color.WHITE, Color.GRAY, Color.BLACK};
+		Random r = new Random();
+		for(int i = 0; i < 120; i++){
+			int col = colors[r.nextInt(colors.length)];
+			showOneColor(col);
+		}
 	}
 }

@@ -174,15 +174,10 @@ public class LearningAPIActivity extends Activity {
 							currentMask.setText(current_state_mask + "");
 						}
 					});
-        	try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	AnimationHelper ah = new AnimationHelper(d1);
+
+       // 	AnimationHelper ah = new AnimationHelper(d1);
 			
-			ah.showColorOnMask(Color.BLUE, current_state_mask);
+		//	ah.showColorOnMask(Color.BLUE, current_state_mask);
         	
         	Log.d("mazurek", "current state mask: " + current_state_mask);
         	Log.d("mazurek", "change mask: " + change_mask);
@@ -252,7 +247,8 @@ public class LearningAPIActivity extends Activity {
 		if (dicePlus == null)
 			return;
 		AnimationHelper ah = new AnimationHelper(dicePlus);
-		ah.showOneColor(android.graphics.Color.CYAN);
+		//ah.showOneColor(android.graphics.Color.CYAN);
+		ah.makeSomeParty();
 	}
 	
 	public void animateMagenta(View view){
