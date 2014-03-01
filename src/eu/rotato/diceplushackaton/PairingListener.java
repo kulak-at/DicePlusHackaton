@@ -100,6 +100,9 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		
 		if(found) return;
 		
+			if (nowPairing > 1)
+				return;
+		
 		dices[nowPairing]=die;
 		found=true;
 		//toast("New dice"+nowPairing);

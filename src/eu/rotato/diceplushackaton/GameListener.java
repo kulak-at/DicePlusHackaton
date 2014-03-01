@@ -199,19 +199,19 @@ public class GameListener extends DiceResponseAdapter {
 			{
 				case Color.RED:
 					
-//					newColor = Color.argb(255, newComponent, 0, 0);
+					newColor = Color.argb(255, color, 0, 0);
 					player_r = color;
 					break;
 			
 				case Color.BLUE:
 					
-//					newColor = Color.argb(255, 0, 0, newComponent);
+					newColor = Color.argb(255, 0, 0, color);
 					player_b = color;
 					break;
 					
 				case Color.GREEN:
 					
-//					newColor = Color.argb(255, 0, newComponent, 0);
+					newColor = Color.argb(255, 0, color, 0);
 					player_g = color;
 					break;
 			}
@@ -230,10 +230,8 @@ public class GameListener extends DiceResponseAdapter {
 					
 				}
 			});
-			
-		int diceColor = Color.argb(255, f_r, f_g, f_b);
 
-		animationHelpers[pid].showColorOnSides(diceColor, currentDiceData.currentFace + "");
+		animationHelpers[pid].showColorOnSides(newColor, currentDiceData.currentFace + "");
 	}
 	
 	private int checkDiff(int diff)
