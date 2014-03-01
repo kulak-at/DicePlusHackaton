@@ -134,11 +134,6 @@ public class GameListener extends DiceResponseAdapter {
 				t.schedule(ttask, 100);
 			}
 		});
-        
-        
-        
-		
-		toast("some roll info on dice "+(pid+1)+" with face="+face);
 		
 	}
 	
