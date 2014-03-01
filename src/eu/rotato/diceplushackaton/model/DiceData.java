@@ -9,6 +9,16 @@ public class DiceData
 	public int previousRoll;
 	public boolean ignoreYaw;
 	public int colorVal;
+	public boolean firstYam = false;
+	public float prevVal = -1000.0f;
+	
+	public void setFirstYam(boolean fYam) {
+		this.firstYam = fYam;
+	}
+	
+	public boolean isFirstYam() {
+		return this.firstYam;
+	}
 	
 	public int getColorVal() {
 		return colorVal;
@@ -51,5 +61,13 @@ public class DiceData
 	}
 	public void setResultColor(int resultColor) {
 		this.resultColor = resultColor;
+	}
+	
+	public float getPrevVal() {
+		return this.prevVal;
+	}
+	
+	public void setPrevVal(float prev) {
+		this.prevVal = prev;
 	}
 }

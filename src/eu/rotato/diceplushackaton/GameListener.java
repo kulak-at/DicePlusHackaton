@@ -1,5 +1,8 @@
 package eu.rotato.diceplushackaton;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import us.dicepl.android.sdk.DiceController;
 import us.dicepl.android.sdk.DiceResponseAdapter;
 import us.dicepl.android.sdk.Die;
@@ -7,6 +10,7 @@ import us.dicepl.android.sdk.responsedata.MagnetometerData;
 import us.dicepl.android.sdk.responsedata.OrientationData;
 import us.dicepl.android.sdk.responsedata.RollData;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import eu.rotato.diceplushackaton.dice.AnimationHelper;
@@ -65,15 +69,15 @@ public class GameListener extends DiceResponseAdapter {
 	
 	public void onRoll(Die die, RollData readout, Exception exception)
 	{
-		int pid=0;
-		if(die!=dices[0]) pid=1;
-		
+		int pidx=0;
+		if(die!=dices[0]) pidx=1;
+		final int pid = pidx;
 		DiceData currentDiceData = diceData[pid];
 		
 		final int face = readout.face;
 		
 		currentDiceData.setCurrentFace(face);
-		currentDiceData.setBaseYaw(currentDiceData.getCurrentYaw());
+//		currentDiceData.setBaseYaw(currentDiceData.getCurrentYaw());
 		
 		int currentVal = 0;
 		Game gejm = Global.getGame();
@@ -104,10 +108,44 @@ public class GameListener extends DiceResponseAdapter {
         
         DiceController.runBlinkAnimation(die, 63, 0, r, g, b, 200, 230, 1);
         
-        currentDiceData.setIgnoreYaw(false);
+        currentDiceData.setIgnoreYaw(true);
+        currentDiceData.setFirstYam(false);
+        
+        parentActivity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Timer t = new Timer();
+
+				final Handler handler = new Handler();
+				TimerTask ttask = new TimerTask() {
+					
+					@Override
+					public void run() {
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								siy(pid);
+							}
+						});
+					}
+				};
+				t.schedule(ttask, 100);
+			}
+		});
+        
+        
+        
 		
 		toast("some roll info on dice "+(pid+1)+" with face="+face);
 		
+	}
+	
+	private void siy(int pid) {
+		DiceData currentDiceData = diceData[pid];
+        currentDiceData.setIgnoreYaw(false);
+        currentDiceData.setFirstYam(true);
 	}
 	
 	@Override
@@ -130,6 +168,23 @@ public class GameListener extends DiceResponseAdapter {
 			
 			if (currentDiceData.isIgnoreYaw())
 				return;
+			
+			if(currentDiceData.isFirstYam()) {
+				currentDiceData.setFirstYam(false);
+				currentDiceData.setBaseYaw(readout.yaw);
+
+				Game game = Global.getGame();
+				int color = 0;
+				if(currentDiceData.resultColor == Color.RED)
+					color = game.getPlayerR(pid);
+				else if(currentDiceData.resultColor == Color.GREEN)
+					color = game.getPlayerG(pid);
+				else
+					color = game.getPlayerB(pid);
+				
+				currentDiceData.setColorVal(color);
+				
+			}
 		
 		Log.d("gunwo", "Dice: " + pid + " roll value: " + roll);
 		
@@ -167,6 +222,12 @@ public class GameListener extends DiceResponseAdapter {
 		
 		float par_color = currentDiceData.getColorVal() / 256.0f;
 		float par_yaw = (5.0f - par_color + (localCurrentYaw / 360.0f) - (localBaseYaw / 360.f)) % 1;
+
+		if(currentDiceData.getPrevVal() > -50.0f) {
+			if(Math.abs(par_yaw - currentDiceData.getPrevVal()) > 0.5f)
+				return; // za duży przeskok
+		}
+		currentDiceData.setPrevVal(par_yaw);
 		
 		int color = (int)(par_yaw * 255);
 		
