@@ -28,10 +28,7 @@ public class AnimationHelper {
 	}
 	
 	public void showOneColor(int standardColor){
-		int red = android.graphics.Color.red(standardColor);
-		int green = android.graphics.Color.green(standardColor);
-		int blue = android.graphics.Color.blue(standardColor);
-		DiceController.runFadeAnimation(die, 63, 0, red, green, blue, 0, 1000, 1);
+		showColorOnMask(standardColor, 63);
 	}
 	
 	public void showColorOnSides(int standardColor, String sides){
