@@ -60,6 +60,7 @@ public class GameActivity extends Activity {
 		RelativeLayout pv = (RelativeLayout)findViewById(R.id.pointz);
 		
 		game = new Game(tl, pv, h_c*multiplier, w_c*multiplier, 2, 30);
+		Global.setGame(game);
 	}
 
 	@Override

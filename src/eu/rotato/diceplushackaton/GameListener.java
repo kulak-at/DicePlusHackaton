@@ -10,15 +10,19 @@ import android.util.Log;
 import android.widget.Toast;
 import eu.rotato.diceplushackaton.dice.AnimationHelper;
 import eu.rotato.diceplushackaton.model.DiceData;
+import eu.rotato.diceplushackaton.model.Game;
+import eu.rotato.diceplushackaton.model.Player;
 
 public class GameListener extends DiceResponseAdapter {
 	private PairingListener pl;
 	private Die dices[];
+	private long playerTime[];
 	private DiceData[] diceData;
 	private AnimationHelper[] animationHelpers;
 	private GameActivity parentActivity;
 	
 	private static final int COLOR_TRESHOLD = 30;
+	private static final long TIMESTAMP_TRESHOLD = 20;
 	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
@@ -39,16 +43,12 @@ public class GameListener extends DiceResponseAdapter {
 		pl = PairingListener.getInstance();
 		dices = pl.getDices();
 		diceData = new DiceData[dices.length];
-		
-			for (int i = 0; i < dices.length; i++)
-			{
-				diceData[i] = new DiceData();
-			}
-			
+		playerTime = new long[dices.length];
 		animationHelpers = new AnimationHelper[dices.length];
 		
 			for (int i = 0; i < dices.length; i++)
 			{
+				diceData[i] = new DiceData();
 				animationHelpers[i] = new AnimationHelper(dices[i]);
 			}
 	}
@@ -108,21 +108,35 @@ public class GameListener extends DiceResponseAdapter {
 	}
 
 	
-	private void updateColor(int pid)
+	private void updateColor(final int pid)
 	{
+		Game game = Global.getGame();
+		if(game == null)
+			return;
+		
+		int player_r = game.getPlayerR(pid);
+		int player_g = game.getPlayerG(pid);
+		int player_b = game.getPlayerB(pid);
+		
 		DiceData currentDiceData = diceData[pid];
 		
 		int localBaseYaw = currentDiceData.getBaseYaw();
 		int localCurrentYaw = currentDiceData.getCurrentYaw();
 		int difference = Math.abs(localBaseYaw - localCurrentYaw);
 		
+		
 			if (localCurrentYaw < localBaseYaw)
 				difference *= -1;
 		
-		int colorDiff = difference % 256;
+			int colorDiff = difference % 256;
 		
-			if (Math.abs(colorDiff) < COLOR_TRESHOLD)
+//			if (Math.abs(colorDiff) < COLOR_TRESHOLD)
+//				return;
+		
+			if(System.currentTimeMillis() - playerTime[pid] < TIMESTAMP_TRESHOLD)
 				return;
+			
+			 playerTime[pid] = System.currentTimeMillis();
 			
 			int newComponent = 255 + colorDiff;
 			
@@ -133,21 +147,36 @@ public class GameListener extends DiceResponseAdapter {
 					newComponent = 255;
 			
 			int newColor = 0;
+			Log.i("game", "Player " + pid + ": Component: " + newComponent);
 			
 			switch (currentDiceData.getResultColor())
 			{
 				case Color.RED:
 					newColor = Color.argb(255, newComponent, 0, 0);
+					player_g = newComponent;
 					break;
 			
 				case Color.BLUE:
 					newColor = Color.argb(255, 0, 0, newComponent);
+					player_b = newComponent;
 					break;
 					
 				case Color.GREEN:
 					newColor = Color.argb(255, 0, newComponent, 0);
+					player_g = newComponent;
 					break;
 			}
+			final int f_r = player_r;
+			final int f_g = player_g;
+			final int f_b = player_b;
+			parentActivity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Global.getGame().changePlayerColor(pid, f_r, f_g, f_b);
+					
+				}
+			});
 			
 		Log.d("mazurek", "Dice: " + pid + " component value: " + newComponent);
 

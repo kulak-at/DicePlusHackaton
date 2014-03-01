@@ -1,8 +1,11 @@
 package eu.rotato.diceplushackaton;
 
+import eu.rotato.diceplushackaton.model.Game;
+
 public class Global {
 	static private int multiplier = 1;
 	static private int threshold = 50;
+	static private Game game = null;
 	
 	static public int getMultiplier() {
 		return multiplier;
@@ -15,5 +18,13 @@ public class Global {
 	
 	static public int getThreshold() {
 		return threshold;
+	}
+	
+	static public Game getGame() {
+		return game;
+	}
+	
+	static public void setGame(Game g) {
+		game = g;
 	}
 }
