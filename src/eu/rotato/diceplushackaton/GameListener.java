@@ -25,6 +25,8 @@ public class GameListener extends DiceResponseAdapter {
 	private static final long TIMESTAMP_TRESHOLD = 20;
 	private static final int ROLL_TRESHOLD = 40;
 	
+	private static boolean ignoreYaw = true;
+	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
 
@@ -95,6 +97,8 @@ public class GameListener extends DiceResponseAdapter {
         int b = Color.blue(currentDiceData.resultColor);
         
         DiceController.runBlinkAnimation(die, 63, 0, r, g, b, 200, 230, 1);
+        
+        ignoreYaw = false;
 		
 		toast("some roll info on dice "+(pid+1)+" with face="+face);
 		
@@ -112,11 +116,11 @@ public class GameListener extends DiceResponseAdapter {
 		int rollDiff = Math.abs(roll - currentDiceData.getPreviousRoll());
 		currentDiceData.setPreviousRoll(roll);
 		
-			if (rollDiff >= ROLL_TRESHOLD)
-			{
-				Log.v("gunwo", "Ignoring yaw!");
+			if (rollDiff >= ROLL_TRESHOLD && ignoreYaw == false)
+				ignoreYaw = true;
+			
+			if (ignoreYaw)
 				return;
-			}
 		
 		Log.d("gunwo", "Dice: " + pid + " roll value: " + roll);
 		
@@ -140,6 +144,9 @@ public class GameListener extends DiceResponseAdapter {
 		DiceData currentDiceData = diceData[pid];
 		
 		int localBaseYaw = currentDiceData.getBaseYaw();
+		
+			
+		
 		int localCurrentYaw = currentDiceData.getCurrentYaw();
 		int difference = Math.abs(localBaseYaw - localCurrentYaw);
 		
