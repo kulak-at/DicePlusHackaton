@@ -140,7 +140,9 @@ public final class PairingListener implements DiceConnectionListener, DiceScanni
 		//toast("Connection established!"+nowPairing);
 		//TODO What we want to subscribe
 		DiceController.subscribeRolls(die);
+		
 		setDiceColor(pid, 63, 255, 0, 0);
+		DiceController.subscribeOrientationReadouts(die, 500);
 		//parentActivity.setInfo(nowPairing,""+(nowPairing+1),"Rescan",true);
 	}
 
