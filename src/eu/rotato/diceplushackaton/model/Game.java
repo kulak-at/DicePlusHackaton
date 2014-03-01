@@ -4,11 +4,16 @@ import java.util.Random;
 import java.util.Vector;
 
 import eu.rotato.diceplushackaton.Global;
+import eu.rotato.diceplushackaton.R;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
 import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
 import android.util.Pair;
+import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -16,9 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public class Game {
 	LinearLayout table = null;
+	View poitz = null;
 	int rows, cols = 0;
 	int players_count = 2;
 	Field fields[][];
@@ -32,12 +39,17 @@ public class Game {
 	
 	Random rand = null;
 	
-	public Game(LinearLayout table, int rows, int cols, int players_count) {
+	public Game(LinearLayout table, View points_view, int rows, int cols, int players_count) {
 		this.rand = new Random();
 		this.table = table;
+		this.poitz = points_view;
 		this.rows = rows;
 		this.cols = cols;
 		this.players_count = players_count;
+		for(int i=0;i<players_count;i++)
+			fadeOut(i, 300, 1000);
+		for(int i=players_count;i<4;i++)
+			fadeOut(i, 1, 1);
 		
 		this.fields = new Field[this.rows][this.cols];
 		for(int i=0;i<this.rows;i++) {
@@ -128,6 +140,16 @@ public class Game {
 		
 	}
 	
+	public boolean isOccupied(int x, int y) {
+		if(x < 0 || y < 0 || x >= this.rows || y >= this.cols || this.fields[x][y].isOccupied())
+			return true;
+		return false;
+	}
+	
+	public boolean isBlocked(int x, int y) {
+		return isOccupied(x+1, y) && isOccupied(x-1, y) && isOccupied(x, y+1) && isOccupied(x, y-1);
+	}
+	
 	public int getPlayerR(int player_id) {
 		return this.players.get(player_id).color_r;
 	}
@@ -149,6 +171,11 @@ public class Game {
 				// changing
 //				this.fields[x][y].setOccupied(player_id);
 				this.players.get(player_id).occupyField(this.fields[x][y]);
+				Game.this.setLabel(0, "+1 point");
+				if(isBlocked(x, y)) {
+					Game.this.setLabel(0, "Player BLOCKED", true);
+					Game.this.getLabel(0).setTextColor(Color.RED);
+				}
 				
 				
 				Pos p = this.players_pos.get(player_id);
@@ -198,6 +225,44 @@ public class Game {
 			throw new Exception();
 		Field field = this.fields[x][y];
 		return Math.abs(field.getColorR() - r) + Math.abs(field.getColorG() - g) + Math.abs(field.getColorB() - b);
+	}
+	
+	private TextView getLabel(int player) {
+		TextView v = null;
+		if(player == 0)
+			v = (TextView)this.poitz.findViewById(R.id.player1);
+		else if(player == 1)
+			v = (TextView)this.poitz.findViewById(R.id.player2);
+		else if(player == 2)
+			v = (TextView)this.poitz.findViewById(R.id.player3);
+		else
+			v = (TextView)this.poitz.findViewById(R.id.player4);
+		
+		return v;
+	}
+	
+	private void setLabel(int player, String value, final boolean keep) {
+		final TextView view = getLabel(player);
+		
+		view.setText(value);
+		view.setAlpha(0.0f);
+		view.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				if(!keep)
+					view.animate().alpha(0.0f).setDuration(100).setStartDelay(0);
+				
+			}
+		});
+	}
+	
+	private void setLabel(int player, String value) {
+		setLabel(player, value, false);
+	}
+	
+	private void fadeOut(int player, int duration, int delay) {
+		getLabel(player).animate().alpha(0.0f).setDuration(duration).setStartDelay(delay);
 	}
 	
 }

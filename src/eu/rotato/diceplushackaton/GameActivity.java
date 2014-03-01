@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import eu.rotato.diceplushackaton.model.Game;
 
 public class GameActivity extends Activity {
@@ -56,8 +57,9 @@ public class GameActivity extends Activity {
         
         setContentView(R.layout.lay);
 		LinearLayout tl = (LinearLayout)findViewById(R.id.table);
+		RelativeLayout pv = (RelativeLayout)findViewById(R.id.pointz);
 		
-		game = new Game(tl, h_c*multiplier, w_c*multiplier, 2);
+		game = new Game(tl, pv, h_c*multiplier, w_c*multiplier, 2);
 	}
 
 	@Override
