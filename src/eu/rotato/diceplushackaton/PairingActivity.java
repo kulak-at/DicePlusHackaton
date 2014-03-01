@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class PairingActivity extends Activity {
 	
 	private Button scanBut1, scanBut2;
 	private Button stopBut1, stopBut2;
+	private SeekBar seekTime, seekMultiplier, seekPointLimit;
 	private TextView views[];
+	private TextView textTimeVal, textMultiplierVal, textPointLimitVal;
 	private PairingListener pl;
 
 	@Override
@@ -26,6 +30,92 @@ public class PairingActivity extends Activity {
 		views[1].setText("?");
 		scanBut1 = (Button) this.findViewById(R.id.scanBut1);
 		scanBut2 = (Button) this.findViewById(R.id.scanBut2);
+		
+		seekTime = (SeekBar) this.findViewById(R.id.seekTime);
+		seekMultiplier = (SeekBar) this.findViewById(R.id.seekMultiplier);
+		seekPointLimit = (SeekBar) this.findViewById(R.id.seekPointLimit);
+		
+		textTimeVal = (TextView) this.findViewById(R.id.textTimeVal);
+		textTimeVal.setText(""+Global.getTimer()+" s");
+		textMultiplierVal = (TextView) this.findViewById(R.id.textMultiplierVal);
+		textMultiplierVal.setText(""+Global.getMultiplier()+"x");
+		textPointLimitVal = (TextView) this.findViewById(R.id.textPointLimitVal);
+		textPointLimitVal.setText(""+Global.getPointsLimit()+" pts");
+		
+		seekTime.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// TODO Auto-generated method stub
+				Global.setTimer(progress+30);
+				textTimeVal.setText(""+Global.getTimer()+" s");
+				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! +30
+				
+			}
+		});
+		
+		seekMultiplier.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				Global.setMultiplier(progress+1);
+				textMultiplierVal.setText(""+Global.getMultiplier()+"x");
+				// TODO Auto-generated method stub
+				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! +1
+				
+			}
+		});
+		
+		seekPointLimit.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				return;
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				Global.setPointsLimit(progress+10);
+				textPointLimitVal.setText(""+Global.getPointsLimit()+" pts");
+				// TODO Auto-generated method stub
+				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! +10
+				
+			}
+		});
 		
 		pl = new PairingListener(this);
 	}
