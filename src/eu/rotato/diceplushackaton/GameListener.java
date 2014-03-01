@@ -24,6 +24,7 @@ public class GameListener extends DiceResponseAdapter {
 	
 	private static final int COLOR_TRESHOLD = 30;
 	private static final long TIMESTAMP_TRESHOLD = 10;
+	private static final int ROLL_TRESHOLD = 40;
 	
 	private void toast(final String text){
 		parentActivity.runOnUiThread(new Runnable(){
@@ -107,6 +108,18 @@ public class GameListener extends DiceResponseAdapter {
 		if(die!=dices[0]) pid=1;
 		
 		DiceData currentDiceData = diceData[pid];
+		
+		int roll = readout.roll;
+		int rollDiff = Math.abs(roll - currentDiceData.getPreviousRoll());
+		currentDiceData.setPreviousRoll(roll);
+		
+			if (rollDiff >= ROLL_TRESHOLD)
+			{
+				Log.v("gunwo", "Ignoring yaw!");
+				return;
+			}
+		
+		Log.d("gunwo", "Dice: " + pid + " roll value: " + roll);
 		
 		currentDiceData.setCurrentYaw(readout.yaw);
 		
